@@ -26,3 +26,6 @@ def dddddddddddd():
 
 def test2():
     print("si jest naprawde glupie")
+
+def greer():
+    print("frorg")
