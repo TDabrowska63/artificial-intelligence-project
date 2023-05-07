@@ -25,3 +25,4 @@ def dddddddddddd():
     print("ddddd")
 
 def test2():
+    print("si jest naprawde glupie")
