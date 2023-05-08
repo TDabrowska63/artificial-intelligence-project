@@ -42,3 +42,16 @@ class CustomGraph:
                     self.weighmatrix[i, j] = weight
                     self.weighmatrix[j, i] = weight
 
+    def standardInput(self):
+        print("put in (is adjacent, weight)")
+        for i in range(self.numberOfNodes):
+            for j in range(i+1, self.numberOfNodes):
+                    isAdj = input()
+                    weight = input()
+                    self.adjmatrix[i, j] = isAdj
+                    if isAdj == 1:
+                        self.weighmatrix[i, j] = weight
+                    else:
+                        self.weighmatrix[i, j] = 0
+
+
