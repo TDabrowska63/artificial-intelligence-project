@@ -1,7 +1,9 @@
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import random
+from GUI import GUI
 
 
 class CustomGraph:
@@ -17,19 +19,24 @@ class CustomGraph:
         print("Adjacency weights:")
         print(self.weighmatrix)
 
-
-    #maybe a way of drawing graphs?
-    #you guys decide
-    def drawGraph(self):
+    # maybe a way of drawing graphs?
+    # you guys decide
+    def drawGraph(self, window):
         g = nx.Graph()
         for i in range(self.numberOfNodes):
             for j in range(self.numberOfNodes):
                 if self.adjmatrix[i][j] == 1:
                     g.add_edge(i, j)
 
-        nx.draw(g)
-        plt.show()
-
+        fig = plt.Figure(figsize=(5, 5), dpi=100)
+        canvas = FigureCanvasTkAgg(fig, window)
+        canvas.draw()
+        canvas.get_tk_widget().grid(row=0, column=0)
+        a = fig.add_subplot(111)
+        a.cla()
+        nx.draw(g, ax=a, with_labels=True)
+        a.plot()
+        canvas.draw()
 
     def randomize(self):
         for i in range(self.numberOfNodes):
