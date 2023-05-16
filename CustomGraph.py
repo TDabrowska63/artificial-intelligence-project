@@ -10,7 +10,7 @@ class CustomGraph:
     def __init__(self, numberOfNodes=10):
         self.numberOfNodes = numberOfNodes
         self.adjmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
-        self.weighmatrix = np.zeros((numberOfNodes,numberOfNodes), dtype=int)
+        self.weighmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
 
     # Method just for debugging, ignore
     def printMe(self):
@@ -19,8 +19,7 @@ class CustomGraph:
         print("Adjacency weights:")
         print(self.weighmatrix)
 
-    # maybe a way of drawing graphs?
-    # you guys decide
+    #drawing graphs
     def drawGraph(self, window):
         g = nx.Graph()
         for i in range(self.numberOfNodes):
@@ -41,13 +40,18 @@ class CustomGraph:
     def randomize(self):
         for i in range(self.numberOfNodes):
             for j in range(i + 1, self.numberOfNodes):
-                adj = random.randint(0, 1)
+                adj = random.randint(0, 100)
                 weight = random.randint(1, 20)
-                self.adjmatrix[i, j] = adj
-                self.adjmatrix[j, i] = adj
-                if adj == 1:
+                if adj <= 30:
+                    self.adjmatrix[i, j] = 1
+                    self.adjmatrix[j, i] = 1
                     self.weighmatrix[i, j] = weight
                     self.weighmatrix[j, i] = weight
+                else:
+                    self.adjmatrix[i, j] = 0
+                    self.adjmatrix[j, i] = 0
+                    self.weighmatrix[i, j] = 0
+                    self.weighmatrix[j, i] = 0
 
     def standardInput(self):
         print("put in (is adjacent, weight)")
