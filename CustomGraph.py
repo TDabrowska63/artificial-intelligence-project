@@ -7,10 +7,11 @@ from GUI import GUI
 
 
 class CustomGraph:
-    def __init__(self, numberOfNodes=10):
+    def __init__(self, numberOfNodes=10, density=30):
         self.numberOfNodes = numberOfNodes
         self.adjmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
         self.weighmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
+        self.density = density
 
     # Method just for debugging, ignore
     def printMe(self):
@@ -42,7 +43,7 @@ class CustomGraph:
             for j in range(i + 1, self.numberOfNodes):
                 adj = random.randint(0, 100)
                 weight = random.randint(1, 20)
-                if adj <= 30:
+                if adj <= self.density:
                     self.adjmatrix[i, j] = 1
                     self.adjmatrix[j, i] = 1
                     self.weighmatrix[i, j] = weight
