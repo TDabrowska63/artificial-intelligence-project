@@ -1,9 +1,8 @@
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 import random
-from GUI import GUI
 
 
 class CustomGraph:
@@ -27,7 +26,7 @@ class CustomGraph:
                 if self.adjmatrix[i][j] == 1:
                     g.add_edge(i, j)
 
-        fig = plt.Figure(figsize=(5, 5), dpi=100)
+        fig = plt.Figure(figsize=(9, 6), dpi=100)
         canvas = FigureCanvasTkAgg(fig, window)
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0)
@@ -42,7 +41,7 @@ class CustomGraph:
             for j in range(i + 1, self.numberOfNodes):
                 adj = random.randint(0, 100)
                 weight = random.randint(1, 20)
-                if adj <= 30:
+                if adj <= 40:
                     self.adjmatrix[i, j] = 1
                     self.adjmatrix[j, i] = 1
                     self.weighmatrix[i, j] = weight
