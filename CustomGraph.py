@@ -18,6 +18,8 @@ class CustomGraph:
 
     # Method just for debugging, ignore
     def printMe(self):
+        print("Coordinates of nodes:")
+        print(self.nodeCoords)
         print("Adjacency matrix:")
         print(self.adjmatrix)
         print("Adjacency weights:")
