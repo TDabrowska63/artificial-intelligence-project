@@ -7,11 +7,14 @@ from GUI import GUI
 
 
 class CustomGraph:
-    def __init__(self, numberOfNodes=10, density=30):
+    def __init__(self, numberOfNodes=10, density=30, Xbound = 20, Ybound = 20):
         self.numberOfNodes = numberOfNodes
         self.adjmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
         self.weighmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
         self.density = density
+        self.nodeCoords = []
+        self.Xbound = Xbound
+        self.Ybound = Ybound
 
     # Method just for debugging, ignore
     def printMe(self):
@@ -40,19 +43,27 @@ class CustomGraph:
 
     def randomize(self):
         for i in range(self.numberOfNodes):
+            coord = (random.randint(0, self.Xbound), random.randint(0, self.Ybound))
+            while coord in self.nodeCoords:
+                coord = (random.randint(0, self.Xbound), random.randint(0, self.Ybound))
+            self.nodeCoords.append(coord)
+
+        for i in range(self.numberOfNodes):
             for j in range(i + 1, self.numberOfNodes):
                 adj = random.randint(0, 100)
-                weight = random.randint(1, 20)
+                weight = self.distance(i, j)
                 if adj <= self.density:
                     self.adjmatrix[i, j] = 1
                     self.adjmatrix[j, i] = 1
                     self.weighmatrix[i, j] = weight
                     self.weighmatrix[j, i] = weight
-                else:
-                    self.adjmatrix[i, j] = 0
-                    self.adjmatrix[j, i] = 0
-                    self.weighmatrix[i, j] = 0
-                    self.weighmatrix[j, i] = 0
+
+    def distance(self, i, j):
+        x1 = self.nodeCoords[i][0]
+        y1 = self.nodeCoords[i][1]
+        x2 = self.nodeCoords[j][0]
+        y2 = self.nodeCoords[j][1]
+        return np.sqrt((x1-x2)**2 + (y1-y2)**2)
 
     def standardInput(self):
         print("put in (is adjacent, weight)")
