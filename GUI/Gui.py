@@ -13,12 +13,12 @@ class Gui:
     start_window: StartWindow = None
     main_window: MainWindow = None
 
-    def __init__(self, graph: CustomGraph):
+    def __init__(self):
         self.window = ctk.CTk()
-        self.show_app(graph)
+        self.show_app()
 
-    def show_app(self, graph: CustomGraph):
+    def show_app(self):
         self.window.withdraw()
-        self.main_window = MainWindow(self.window, graph)
-        self.start_window = StartWindow(self.window, self.main_window, graph)
+        self.main_window = MainWindow(self.window)
+        self.start_window = StartWindow(self.window, self.main_window)
         self.window.mainloop()

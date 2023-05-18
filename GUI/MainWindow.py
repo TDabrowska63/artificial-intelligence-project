@@ -1,7 +1,7 @@
 import string
 import tkinter as tk
 import customtkinter as ctk
-import CustomGraph
+from CustomGraph import CustomGraph
 
 
 class MainWindow:
@@ -25,14 +25,23 @@ class MainWindow:
     cities: string = []
     gui_width: int = 1100
     gui_height: int = 580
-    density: int = 40
-    number_of_cities: int = 10
+    density: int = 90
+    number_of_cities: int = 20
+    graph: CustomGraph = None
 
-    def __init__(self, root, graph: CustomGraph):
+    def __init__(self, root):
         self.root = root
+        self.createMap()
         self.setUpMainWindow()
-        self.addMap(graph)
-        self.addSidebar(graph)
+        self.addMap()
+        self.addSidebar()
+
+    def createMap(self):
+        self.graph = CustomGraph(self.number_of_cities, self.density)
+        # self.graph.numberOfNodes = self.number_of_cities
+        # self.graph.density = self.density
+        self.graph.randomize()
+        self.graph.printMe()
 
     def setUpMainWindow(self):
         self.main_window = ctk.CTkToplevel()
@@ -42,21 +51,24 @@ class MainWindow:
         self.main_window.grid_columnconfigure(0, weight=5)
         self.main_window.grid_columnconfigure(1, weight=1)
 
-    def addMap(self, graph):
+    def addMap(self):
+        if self.map_frame is not None:
+            self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        graph.drawGraph(self.main_window)
+        self.graph.drawGraph(self.main_window)
 
-    def addSidebar(self, graph):
+    def addSidebar(self):
         self.sidebar_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.sidebar_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        # self.sidebar_frame.grid_propagate(False)
         # self.sidebar_frame.grid_rowconfigure(5, weight=1)
 
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Shortest Path",
                                        font=ctk.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
 
-        for i in range(graph.numberOfNodes):
+        for i in range(self.number_of_cities):
             self.cities.append("City " + str(i))
 
         self.start_label = ctk.CTkLabel(self.sidebar_frame, text="Start City:")
@@ -93,4 +105,7 @@ class MainWindow:
     def active(self, density: int, number_of_cities: int):
         self.density = density
         self.number_of_cities = number_of_cities
+        self.createMap()
+        self.addMap()
+        # self.graph.printMe()
         self.main_window.deiconify()
