@@ -49,15 +49,16 @@ class CustomGraph:
                 coord = (random.randint(0, self.Xbound), random.randint(0, self.Ybound))
             self.nodeCoords.append(coord)
 
-        for i in range(self.numberOfNodes):
-            for j in range(i + 1, self.numberOfNodes):
-                adj = random.randint(0, 100)
-                weight = self.distance(i, j)
-                if adj <= self.density:
-                    self.adjmatrix[i, j] = 1
-                    self.adjmatrix[j, i] = 1
-                    self.weighmatrix[i, j] = weight
-                    self.weighmatrix[j, i] = weight
+        for i in range(self.numberOfNodes): # row
+            while np.sum(self.adjmatrix[i]) == 0:
+                for j in range(i + 1, self.numberOfNodes): # column
+                    adj = random.randint(0, 100)
+                    weight = self.distance(i, j)
+                    if adj <= self.density:
+                        self.adjmatrix[i, j] = 1
+                        self.adjmatrix[j, i] = 1
+                        self.weighmatrix[i, j] = weight
+                        self.weighmatrix[j, i] = weight
 
     def distance(self, i, j):
         x1 = self.nodeCoords[i][0]
