@@ -32,7 +32,7 @@ class CustomGraph:
                 if self.adjmatrix[i][j] == 1:
                     g.add_edge(i, j)
 
-        fig = plt.Figure(figsize=(9, 6), dpi=100)
+        fig = plt.Figure(figsize=(8, 5), dpi=100)
         canvas = FigureCanvasTkAgg(fig, window)
         canvas.draw()
         canvas.get_tk_widget().grid(row=0, column=0)
