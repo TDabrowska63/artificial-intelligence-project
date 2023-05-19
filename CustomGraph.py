@@ -6,6 +6,7 @@ import random
 
 
 class CustomGraph:
+    # X/Ybound are the sizes of the plane
     def __init__(self, numberOfNodes=10, density=30, Xbound = 20, Ybound = 20):
         self.numberOfNodes = numberOfNodes
         self.adjmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
@@ -50,15 +51,14 @@ class CustomGraph:
             self.nodeCoords.append(coord)
 
         for i in range(self.numberOfNodes): # row
-            while np.sum(self.adjmatrix[i]) == 0:
-                for j in range(i + 1, self.numberOfNodes): # column
-                    adj = random.randint(0, 100)
-                    weight = self.distance(i, j)
-                    if adj <= self.density:
-                        self.adjmatrix[i, j] = 1
-                        self.adjmatrix[j, i] = 1
-                        self.weighmatrix[i, j] = weight
-                        self.weighmatrix[j, i] = weight
+            for j in range(i + 1, self.numberOfNodes):  # column
+                adj = random.randint(0, 100)
+                weight = self.distance(i, j)
+                if adj <= self.density:
+                    self.adjmatrix[i, j] = 1
+                    self.adjmatrix[j, i] = 1
+                    self.weighmatrix[i, j] = weight
+                    self.weighmatrix[j, i] = weight
 
     def distance(self, i, j):
         x1 = self.nodeCoords[i][0]
