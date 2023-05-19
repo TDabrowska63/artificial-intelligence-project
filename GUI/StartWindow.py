@@ -74,4 +74,10 @@ class StartWindow:
 
     def goToMainWindow(self, density, number_of_cities):
         self.start_window.destroy()
-        self.main_window.active(int(density), int(number_of_cities))
+
+        try:
+            self.main_window.active(int(density), int(number_of_cities))
+        except ValueError:
+            den = self.density if density == '' else density
+            num = self.number_of_cities if number_of_cities == '' else number_of_cities
+            self.main_window.active(int(den), int(num))
