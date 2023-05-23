@@ -10,9 +10,5 @@ print(Colours.NOT_VISITED.value)
 print(Algorithms.DIJKSTRA_A.value)
 g.printMe()
 gui = Gui()
-a = Astar(g)
-a.printMe()
-path = a.aStarAlgorithm(0, 9)
-d = Dijkstra(g)
-print(d.dijkstraAlgorithm(0, 9))
+
 
