@@ -1,5 +1,5 @@
 import sys
-
+from collections import deque
 
 class Dijkstra:
     def __init__(self, graph):
@@ -7,6 +7,7 @@ class Dijkstra:
         self.visited = [False] * graph.numberOfNodes
         self.distances = [sys.maxsize] * graph.numberOfNodes
         self.previous = [None] * self.graph.numberOfNodes
+        self.visitedinorder = deque()
 
     def dijkstraAlgorithm(self, start, end):
         self.distances[start] = 0
@@ -16,6 +17,7 @@ class Dijkstra:
             min_index = -1
             for i in range(self.graph.numberOfNodes):
                 if not self.visited[i] and self.distances[i] < min_distance:
+                    self.visitedinorder.append(i)
                     min_distance = self.distances[i]
                     min_index = i
 
@@ -23,7 +25,15 @@ class Dijkstra:
 
             if min_index == end:
                 path = self._build_path(end)
-                return self.distances[end], path
+                unique = set()
+                newvisited = deque()
+                while self.visitedinorder:
+                    element = self.visitedinorder.popleft()
+                    if element not in unique:
+                        unique.add(element)
+                        newvisited.append(element)
+                visitedlist = list(newvisited)
+                return self.distances[end], path, visitedlist
 
             for j in range(self.graph.numberOfNodes):
                 if (
@@ -34,7 +44,7 @@ class Dijkstra:
                 ):
                     self.distances[j] = self.distances[min_index] + self.graph.weighmatrix[min_index][j]
                     self.previous[j] = min_index
-        return None, None
+        return None, None, None
 
     def _build_path(self, end):
         path = []
