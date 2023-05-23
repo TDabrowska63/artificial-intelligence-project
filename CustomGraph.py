@@ -44,7 +44,6 @@ class CustomGraph:
         weights = nx.get_edge_attributes(g, 'weight')
         nx.draw(g, pos, ax=a, with_labels=True)
         # Create edge labels
-        labels = {e: str(g[e[0]][e[1]]['weight']) for e in g.edges}
         nx.draw_networkx_edge_labels(g, pos, ax= a, edge_labels = weights)
         a.plot()
         canvas.draw()
