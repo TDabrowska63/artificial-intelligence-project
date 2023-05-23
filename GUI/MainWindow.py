@@ -31,19 +31,19 @@ class MainWindow:
 
     def __init__(self, root):
         self.root = root
-        self.createMap()
-        self.setUpMainWindow()
-        self.addMap()
-        self.addSidebar()
+        self.create_map()
+        self.set_up_main_window()
+        self.add_map()
+        self.add_sidebar()
 
-    def createMap(self):
+    def create_map(self):
         self.graph = CustomGraph(self.number_of_cities, self.density)
         # self.graph.numberOfNodes = self.number_of_cities
         # self.graph.density = self.density
         self.graph.randomize()
         self.graph.printMe()
 
-    def setUpMainWindow(self):
+    def set_up_main_window(self):
         self.main_window = ctk.CTkToplevel()
         self.main_window.withdraw()
         self.main_window.title("AI Project - Travelling from City to City")
@@ -51,14 +51,14 @@ class MainWindow:
         self.main_window.grid_columnconfigure(0, weight=5)
         self.main_window.grid_columnconfigure(1, weight=1)
 
-    def addMap(self):
+    def add_map(self):
         if self.map_frame is not None:
             self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
         self.graph.drawGraph(self.main_window)
 
-    def addSidebar(self):
+    def add_sidebar(self):
         self.sidebar_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.sidebar_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew")
         # self.sidebar_frame.grid_propagate(False)
@@ -96,16 +96,16 @@ class MainWindow:
                                                value=2)
         self.astar_button.grid(row=3, column=2, pady=10, padx=20, sticky="n")
 
-        self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.runEvent)
+        self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_event)
         self.run_button.grid(row=6, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-    def runEvent(self):
+    def run_event(self):
         print("calculating shortest path...")
 
     def active(self, density: int, number_of_cities: int):
         self.density = density
         self.number_of_cities = number_of_cities
-        self.createMap()
-        self.addMap()
+        self.create_map()
+        self.add_map()
         # self.graph.printMe()
         self.main_window.deiconify()

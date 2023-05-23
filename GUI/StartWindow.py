@@ -25,15 +25,15 @@ class StartWindow:
     def __init__(self, root, main_window):
         self.root = root
         self.main_window = main_window
-        self.setUpStartWindow()
-        self.addContent()
+        self.set_up_start_window()
+        self.add_content()
 
-    def setUpStartWindow(self):
+    def set_up_start_window(self):
         self.start_window = ctk.CTkToplevel()
         self.start_window.title("AI Project - Travelling from City to City")
         self.start_window.geometry(f"{self.gui_width}x{self.gui_height}")
 
-    def addContent(self):
+    def add_content(self):
         # project
         self.project_label = ctk.CTkLabel(self.start_window,
                                           text="AI PROJECT", font=ctk.CTkFont(size=20, weight="bold"))
@@ -68,13 +68,12 @@ class StartWindow:
         # save and go to the main window
         self.open_main_button = ctk.CTkButton(self.start_window, text="Save and Proceed",
                                               font=ctk.CTkFont(size=15),
-                                              command=lambda: self.goToMainWindow(self.density_entry.get(),
-                                                                                  self.cities_num_entry.get()))
+                                              command=lambda: self.go_to_main_window(self.density_entry.get(),
+                                                                                     self.cities_num_entry.get()))
         self.open_main_button.pack(pady=20)
 
-    def goToMainWindow(self, density, number_of_cities):
+    def go_to_main_window(self, density, number_of_cities):
         self.start_window.destroy()
-
         try:
             self.main_window.active(int(density), int(number_of_cities))
         except ValueError:
