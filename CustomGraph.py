@@ -41,11 +41,11 @@ class CustomGraph:
         a.cla()
         # Create positions of all nodes and save them
         pos = nx.spring_layout(g)
-        # edges, weights = zip(*nx.get_edge_attributes(g, 'weight').items())
+        weights = nx.get_edge_attributes(g, 'weight')
         nx.draw(g, pos, ax=a, with_labels=True)
         # Create edge labels
         labels = {e: str(g[e[0]][e[1]]['weight']) for e in g.edges}
-        nx.draw_networkx_edge_labels(g, pos, {e: str(g[e[0]][e[1]]['weight']) for e in g.edges})
+        nx.draw_networkx_edge_labels(g, pos, ax= a, edge_labels = weights)
         a.plot()
         canvas.draw()
 
