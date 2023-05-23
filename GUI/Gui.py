@@ -19,6 +19,6 @@ class Gui:
 
     def show_app(self):
         self.window.withdraw()
-        self.main_window = MainWindow(self.window)
+        # self.main_window = MainWindow(self.window)
         self.start_window = StartWindow(self.window, self.main_window)
         self.window.mainloop()

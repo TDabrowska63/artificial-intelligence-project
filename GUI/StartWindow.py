@@ -24,7 +24,7 @@ class StartWindow:
 
     def __init__(self, root, main_window):
         self.root = root
-        self.main_window = main_window
+        # self.main_window = main_window
         self.set_up_start_window()
         self.add_content()
 
@@ -75,8 +75,10 @@ class StartWindow:
     def go_to_main_window(self, density, number_of_cities):
         self.start_window.destroy()
         try:
-            self.main_window.active(int(density), int(number_of_cities))
+            self.main_window = MainWindow(self.root, int(density), int(number_of_cities))
+            # self.main_window.active(int(density), int(number_of_cities))
         except ValueError:
             den = self.density if density == '' else density
             num = self.number_of_cities if number_of_cities == '' else number_of_cities
-            self.main_window.active(int(den), int(num))
+            self.main_window = MainWindow(self.root, int(density), int(number_of_cities))
+            # self.main_window.active(int(den), int(num))

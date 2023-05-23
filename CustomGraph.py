@@ -7,7 +7,7 @@ import random
 
 class CustomGraph:
     # X/Ybound are the sizes of the plane
-    def __init__(self, numberOfNodes=10, density=30, Xbound = 20, Ybound = 20):
+    def __init__(self, numberOfNodes=10, density=30, Xbound=20, Ybound=20):
         self.numberOfNodes = numberOfNodes
         self.adjmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
         self.weighmatrix = np.zeros((numberOfNodes, numberOfNodes), dtype=int)
