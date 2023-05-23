@@ -128,8 +128,9 @@ class MainWindow:
             a = Astar(self.graph)
             # a.printMe()
             path = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+            print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
 
-    def active(self, density: int, number_of_cities: int):
+    def update_map(self, density: int, number_of_cities: int):
         self.density = density
         self.number_of_cities = number_of_cities
         self.create_map()

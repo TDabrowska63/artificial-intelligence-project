@@ -31,7 +31,7 @@ class CustomGraph:
         for i in range(self.numberOfNodes):
             for j in range(self.numberOfNodes):
                 if self.adjmatrix[i][j] == 1:
-                    g.add_edge(i, j)
+                    g.add_edge(i, j, weight=self.weighmatrix[i][j])
 
         fig = plt.Figure(figsize=(8, 5), dpi=100)
         canvas = FigureCanvasTkAgg(fig, window)
@@ -39,7 +39,13 @@ class CustomGraph:
         canvas.get_tk_widget().grid(row=0, column=0)
         a = fig.add_subplot(111)
         a.cla()
-        nx.draw(g, ax=a, with_labels=True)
+        # Create positions of all nodes and save them
+        pos = nx.spring_layout(g)
+        # edges, weights = zip(*nx.get_edge_attributes(g, 'weight').items())
+        nx.draw(g, pos, ax=a, with_labels=True)
+        # Create edge labels
+        labels = {e: str(g[e[0]][e[1]]['weight']) for e in g.edges}
+        nx.draw_networkx_edge_labels(g, pos, {e: str(g[e[0]][e[1]]['weight']) for e in g.edges})
         a.plot()
         canvas.draw()
 
