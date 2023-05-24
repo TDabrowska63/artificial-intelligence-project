@@ -86,7 +86,6 @@ class Astar:
 
                 # otherwise, check if it's quicker to first visit n, then m
                 # and if it is, update parent data and g data
-                # and if the node was in the closed_list, move it to open_list
                 elif m in openList:
                     if g[m] > g[n] + weight:
                         g[m] = g[n] + weight
@@ -113,6 +112,7 @@ class Astar:
                     neighbours.append((j, graph.weighmatrix[i, j]))
             adj_list[i] = neighbours
         return adj_list
+
     def printMe(self):
         print("Adjacency list:")
         print(self.adjacency_list)
