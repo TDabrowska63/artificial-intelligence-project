@@ -61,14 +61,11 @@ class MainWindow:
 
     def create_map(self):
         self.graph = CustomGraph(self.number_of_cities, self.density)
-        # self.graph.numberOfNodes = self.number_of_cities
-        # self.graph.density = self.density
         self.graph.randomize()
         self.graph.printMe()
 
     def set_up_main_window(self):
         self.main_window = ctk.CTkToplevel()
-        # self.main_window.withdraw()
         self.main_window.title("AI Project - Travelling from City to City")
         self.main_window.geometry(f"{self.gui_width}x{self.gui_height}")
         self.main_window.grid_columnconfigure(0, weight=5)
@@ -79,35 +76,44 @@ class MainWindow:
             self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
-
+        # creating networkx graph with grey nodes
         self.nx_graph = nx.Graph()
         self.default_cities_coloring()
-
+        # creating figure and canvas to draw on
         self.figure = plt.Figure(figsize=(8, 5), dpi=100)
         self.canvas = FigureCanvasTkAgg(self.figure, self.main_window)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row=0, column=0)
+        # draw graph
         self.draw_graph()
 
     def default_cities_coloring(self):
+        # default coloring - all cities to gray
         self.color_map.clear()
         for city in range(self.number_of_cities):
             self.color_map.append('grey')
 
     def add_sidebar(self):
+        # creating sidebar
         self.sidebar_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.sidebar_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew")
-        # self.sidebar_frame.grid_propagate(False)
-        # self.sidebar_frame.grid_rowconfigure(5, weight=1)
+        # adding sidebar content
+        self.show_sidebar_labels()
+        self.show_cities_to_choose()
+        self.show_algorithms_to_choose()
+        self.show_buttons()
 
+    def show_sidebar_labels(self):
+        # logo/title label
         self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Shortest Path",
                                        font=ctk.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 5))
-
-        self.density_label = ctk.CTkLabel(self.sidebar_frame, text=f"Density of roads: {self.density}",
+        # show chosen density from start window
+        self.density_label = ctk.CTkLabel(self.sidebar_frame, bg_color='#147', text=f" Density of roads: {self.density} ",
                                           font=ctk.CTkFont(size=15))
         self.density_label.grid(row=1, column=0, padx=20, pady=(5, 0))
 
+    def show_cities_to_choose(self):
         for i in range(self.number_of_cities):
             self.cities.append(str(i))
 
@@ -125,6 +131,7 @@ class MainWindow:
                                             variable=self.chosen_end_city, values=self.cities)
         self.end_option.grid(row=5, column=0, padx=20, pady=(0, 10))
 
+    def show_algorithms_to_choose(self):
         self.choose_algorithm_frame = ctk.CTkFrame(self.sidebar_frame)
         self.choose_algorithm_frame.grid(row=6, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
         self.radio_var = tk.IntVar(value=0)
@@ -133,13 +140,11 @@ class MainWindow:
         self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
                                                   variable=self.radio_var, value=0)
         self.dijkstra_button.grid(row=1, column=2, pady=10, padx=20, sticky="n")
-        # self.bfs_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="BFS", variable=self.radio_var,
-        #                                      value=1)
-        # self.bfs_button.grid(row=2, column=2, pady=10, padx=20, sticky="n")
         self.astar_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="A*", variable=self.radio_var,
                                                value=1)
         self.astar_button.grid(row=2, column=2, pady=10, padx=20, sticky="n")
 
+    def show_buttons(self):
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_searching)
         self.run_button.grid(row=7, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
 
@@ -157,13 +162,11 @@ class MainWindow:
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
-            #if visited_list is not None:
             self.dijkstra_visualisation(path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
-            # a.printMe()
             distance, path, states_matrix = \
                 a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
@@ -172,8 +175,6 @@ class MainWindow:
         self.path_window = PathWindow(self.root, distance, path)
 
     def update_map(self):
-        # self.create_map()
-        # self.add_map()
         self.clear_canvas()
         if self.map_frame is not None:
             self.map_frame.destroy()
@@ -191,6 +192,7 @@ class MainWindow:
             self.canvas.get_tk_widget().delete(item)
 
     def draw_graph(self):
+        self.nx_graph.add_nodes_from([city for city in range(self.number_of_cities)])
         for i in range(self.number_of_cities):
             for j in range(self.number_of_cities):
                 if self.graph.adjmatrix[i][j] == 1:
@@ -204,10 +206,8 @@ class MainWindow:
         pos_colors = []
         for key in myKeys:
             pos_colors.append(self.color_map[key])
-        # myKeys.sort()
-        # sorted_pos = {i: pos[i] for i in myKeys}
-        # print(sorted_pos)
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
+        # draw nx graph
         nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
         # Create edge labels
         nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
@@ -273,5 +273,6 @@ class MainWindow:
         # update gui
         self.update_map()
 
-    def exit_from_program(self):
+    @staticmethod
+    def exit_from_program():
         sys.exit("Program ended successfully! \nBye :)")

@@ -23,7 +23,7 @@ class PathWindow:
 
     def add_content(self, distance: int, path):
         self.path_label = ctk.CTkLabel(self.path_window,
-                                       text="SHORTEST PATH", bg_color='#147', font=ctk.CTkFont(size=20, weight="bold"))
+                                       text=" SHORTEST PATH ", bg_color='#147', font=ctk.CTkFont(size=20, weight="bold"))
         self.path_label.pack(pady=(10, 5))
 
         if distance is not None:
