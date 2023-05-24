@@ -157,8 +157,8 @@ class MainWindow:
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
-            if visited_list is not None:
-                self.dijkstra_visualisation(path, visited_list)
+            #if visited_list is not None:
+            self.dijkstra_visualisation(path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
