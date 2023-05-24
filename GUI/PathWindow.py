@@ -2,6 +2,7 @@ import customtkinter as ctk
 
 
 class PathWindow:
+
     root: ctk.CTk = None
     path_window: ctk.CTkToplevel = None
     path_label: ctk.CTkLabel = None

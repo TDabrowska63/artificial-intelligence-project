@@ -3,6 +3,7 @@ from GUI.MainWindow import MainWindow
 
 
 class StartWindow:
+
     root: ctk.CTk = None
     start_window: ctk.CTkToplevel = None
     main_window: MainWindow = None

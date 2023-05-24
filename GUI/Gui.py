@@ -8,6 +8,7 @@ ctk.set_default_color_theme("blue")
 
 
 class Gui:
+
     window: ctk.CTk = None
     start_window: StartWindow = None
     main_window: MainWindow = None

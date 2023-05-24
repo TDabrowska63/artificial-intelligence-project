@@ -3,6 +3,7 @@ import tkinter as tk
 import customtkinter as ctk
 import networkx as nx
 import time
+import sys
 
 from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
@@ -14,6 +15,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 class MainWindow:
+
     root: ctk.CTk = None
     main_window: ctk.CTkToplevel = None
     path_window: PathWindow = None
@@ -35,6 +37,7 @@ class MainWindow:
     bfs_button: ctk.CTkRadioButton = None
     astar_button: ctk.CTkRadioButton = None
     run_button: ctk.CTkButton = None
+    exit_button: ctk.CTkButton = None
     cities: string = []
     gui_width: int = 1100
     gui_height: int = 580
@@ -138,7 +141,10 @@ class MainWindow:
         self.astar_button.grid(row=2, column=2, pady=10, padx=20, sticky="n")
 
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_searching)
-        self.run_button.grid(row=7, column=0, padx=(20, 20), pady=(20, 20), sticky="nsew")
+        self.run_button.grid(row=7, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
+
+        self.exit_button = ctk.CTkButton(self.sidebar_frame, text="Exit", command=self.exit_from_program)
+        self.exit_button.grid(row=8, column=0, padx=(20, 20), pady=(5, 20), sticky="nsew")
 
     def run_searching(self):
         print(f"calculating shortest path... {self.radio_var.get()}")
@@ -266,3 +272,6 @@ class MainWindow:
                 self.color_map[city] = 'red'
         # update gui
         self.update_map()
+
+    def exit_from_program(self):
+        sys.exit("Program ended successfully! \nBye :)")

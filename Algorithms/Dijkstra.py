@@ -1,6 +1,7 @@
 import sys
 from collections import deque
 
+
 class Dijkstra:
     def __init__(self, graph):
         self.graph = graph
