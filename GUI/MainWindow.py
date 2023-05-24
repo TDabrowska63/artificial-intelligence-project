@@ -151,8 +151,9 @@ class MainWindow:
             print("A* was chosen")
             a = Astar(self.graph)
             # a.printMe()
-            path = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+            path, states_matrix, distance = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
+            self.astar_visualisation(path, states_matrix, distance)
 
     def update_map(self):
         # self.create_map()
@@ -184,13 +185,16 @@ class MainWindow:
         # Create positions of all nodes and save them
         pos = nx.spring_layout(self.nx_graph, seed=100)
         myKeys = list(pos.keys())
-        myKeys.sort()
-        sorted_pos = {i: pos[i] for i in myKeys}
-        print(sorted_pos)
+        pos_colors = []
+        for key in myKeys:
+            pos_colors.append(self.color_map[key])
+        # myKeys.sort()
+        # sorted_pos = {i: pos[i] for i in myKeys}
+        # print(sorted_pos)
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
-        nx.draw(self.nx_graph, sorted_pos, ax=a, node_color=self.color_map, with_labels=True)
+        nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
         # Create edge labels
-        nx.draw_networkx_edge_labels(self.nx_graph, sorted_pos, ax=a, edge_labels=weights)
+        nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
         a.plot()
         self.canvas.draw()
 
@@ -201,7 +205,14 @@ class MainWindow:
         for city in visited_list:
             self.color_map[city] = 'green'
             self.update_map()
-            time.sleep(5)
+            time.sleep(1)
+        # show the shortest path
+        for city in path:
+            self.color_map[city] = 'red'
+        # update gui
+        self.update_map()
+
+    def astar_visualisation(self, path, states_matrix, distance):
         # show the shortest path
         for city in path:
             self.color_map[city] = 'red'
