@@ -213,6 +213,29 @@ class MainWindow:
         self.update_map()
 
     def astar_visualisation(self, path, states_matrix, distance):
+        # resetting cities colors
+        self.default_cities_coloring()
+
+        # coloring cities in such order that:
+        # red colour represents the nodes that are potential successors to current node (open list)
+        # green colour represents the current node whose neighbouring nodes are being inspected (current note)
+        # blue colour represents the nodes who's all neighbours have been inspected (closed list)
+
+        for column in range(len(states_matrix[0])):
+            current_state = states_matrix[:, column]
+            for city in range(len(current_state)):
+                if current_state[city] == Colours.CURRENT_NODE:
+                    self.color_map[city] = 'green'
+                elif current_state[city] == Colours.NOT_VISITED:
+                    pass
+                        # self.color_map[city] = 'gray'
+                elif current_state[city] == Colours.IS_OPEN_LIST:
+                    self.color_map[city] = 'cyan'
+                elif current_state[city] == Colours.IS_CLOSED_LIST:
+                    self.color_map[city] = 'blue'
+            self.update_map()
+            time.sleep(1)
+
         # show the shortest path
         for city in path:
             self.color_map[city] = 'red'
