@@ -6,8 +6,8 @@ import time
 
 from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
-from CustomGraph import CustomGraph
-from Constants import Algorithms, Colours
+from Misc.CustomGraph import CustomGraph
+from Misc.Constants import Algorithms, Colours
 from Algorithms.Astar import Astar
 from Algorithms.Dijkstra import Dijkstra
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
