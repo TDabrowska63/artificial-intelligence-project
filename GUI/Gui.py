@@ -1,7 +1,6 @@
 import customtkinter as ctk
 from GUI.MainWindow import MainWindow
 from GUI.StartWindow import StartWindow
-import CustomGraph
 
 # set modes
 ctk.set_appearance_mode("dark")
@@ -19,6 +18,5 @@ class Gui:
 
     def show_app(self):
         self.window.withdraw()
-        # self.main_window = MainWindow(self.window)
         self.start_window = StartWindow(self.window, self.main_window)
         self.window.mainloop()
