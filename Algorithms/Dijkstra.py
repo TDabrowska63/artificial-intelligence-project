@@ -46,15 +46,15 @@ class Dijkstra:
                 ):
                     self.distances[j] = self.distances[min_index] + self.graph.weighmatrix[min_index][j]
                     self.previous[j] = min_index
-        # unique = set()
-        # newvisited = deque()
-        # while self.visitedinorder:
-        #     element = self.visitedinorder.popleft()
-        #     if element not in unique:
-        #         unique.add(element)
-        #         newvisited.append(element)
-        # visitedlist = list(newvisited)
-        return None, None, None
+        unique = set()
+        newvisited = deque()
+        while self.visitedinorder:
+            element = self.visitedinorder.popleft()
+            if element not in unique:
+                unique.add(element)
+                newvisited.append(element)
+        visitedlist = list(newvisited)
+        return None, None, visitedlist
 
     def _build_path(self, end):
         path = []
