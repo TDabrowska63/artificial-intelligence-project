@@ -51,6 +51,7 @@ class Astar:
                 return None, statesMatrix, None
 
             newState[n][0] = Colours.CURRENT_NODE
+            statesMatrix = np.hstack((statesMatrix, newState))
 
             # if the current node is the stop_node
             # then we begin reconstructing the path from it to the start_node
@@ -70,7 +71,6 @@ class Astar:
                     distance = distance + self.graph.weighmatrix[reconstPath[i], reconstPath[i+1]]
 
                 print('Path found: {}'.format(reconstPath))
-                statesMatrix = np.hstack((statesMatrix, newState))
                 return reconstPath, statesMatrix, distance
 
             neighbours = self.getNeighbors(n)
@@ -97,6 +97,7 @@ class Astar:
                             openList.add(m)
                             newState[m][0] = Colours.IS_OPEN_LIST
 
+            statesMatrix = np.hstack((statesMatrix, newState))
             # remove n from the open_list, and add it to closed_list
             # because all of his neighbors were inspected
             openList.remove(n)
