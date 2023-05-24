@@ -7,8 +7,8 @@ class PathWindow:
     path_label: ctk.CTkLabel = None
     dist_label: ctk.CTkLabel = None
     via_label: ctk.CTkLabel = None
-    gui_width: int = 300
-    gui_height: int = 130
+    gui_width: int = 290
+    gui_height: int = 125
 
     def __init__(self, root: ctk.CTk, distance: int, path):
         self.root = root
@@ -25,9 +25,14 @@ class PathWindow:
                                        text="SHORTEST PATH", bg_color='#147', font=ctk.CTkFont(size=20, weight="bold"))
         self.path_label.pack(pady=(10, 5))
 
-        self.dist_label = ctk.CTkLabel(self.path_window,
-                                       text=f"Distance: {distance}km", font=ctk.CTkFont(size=18))
-        self.dist_label.pack(pady=(5, 5))
-        self.via_label = ctk.CTkLabel(self.path_window,
-                                      text=f"Path via: {path}", font=ctk.CTkFont(size=18))
-        self.via_label.pack(pady=(5, 10))
+        if distance is not None:
+            self.dist_label = ctk.CTkLabel(self.path_window,
+                                           text=f"Distance: {distance}km", font=ctk.CTkFont(size=18))
+            self.dist_label.pack(pady=(5, 5))
+            self.via_label = ctk.CTkLabel(self.path_window,
+                                          text=f"Path via: {path}", font=ctk.CTkFont(size=18))
+            self.via_label.pack(pady=(5, 10))
+        else:
+            self.dist_label = ctk.CTkLabel(self.path_window,
+                                           text="There is no path \nbetween chosen cities :(", font=ctk.CTkFont(size=18))
+            self.dist_label.pack(pady=(5, 5))
