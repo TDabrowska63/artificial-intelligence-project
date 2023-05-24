@@ -8,8 +8,8 @@ from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
 from CustomGraph import CustomGraph
 from Constants import Algorithms, Colours
-from Astar import Astar
-from Dijkstra import Dijkstra
+from Algorithms.Astar import Astar
+from Algorithms.Dijkstra import Dijkstra
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
@@ -158,7 +158,7 @@ class MainWindow:
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
             # a.printMe()
-            path, states_matrix, distance = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+            distance, path, states_matrix = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
             self.astar_visualisation(path, states_matrix, distance)
         self.path_window = PathWindow(self.root, distance, path)

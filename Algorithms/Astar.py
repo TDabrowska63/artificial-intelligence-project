@@ -16,7 +16,7 @@ class Astar:
 
         return H[n]
 
-    #returns: path, statesMatrix, distance
+    #returns: distance, path, statesMatrix
     def aStarAlgorithm(self, startNode, stopNode):
         # open_list is a list of nodes which have been visited, but who's neighbors
         # haven't all been inspected, starts off with the start node
@@ -48,7 +48,7 @@ class Astar:
 
             if n == None:
                 print('Path does not exist!')
-                return None, statesMatrix, None
+                return None, None, statesMatrix
 
             newState[n][0] = Colours.CURRENT_NODE
             statesMatrix = np.hstack((statesMatrix, newState))
@@ -71,7 +71,7 @@ class Astar:
                     distance = distance + self.graph.weighmatrix[reconstPath[i], reconstPath[i+1]]
 
                 print('Path found: {}'.format(reconstPath))
-                return reconstPath, statesMatrix, distance
+                return distance, reconstPath, statesMatrix
 
             neighbours = self.getNeighbors(n)
             # for all neighbors of the current node do
@@ -101,7 +101,7 @@ class Astar:
             statesMatrix = np.hstack((statesMatrix, newState))
 
         print('Path does not exist!')
-        return None, statesMatrix, None
+        return None, None, statesMatrix
 
     def transform(self, graph):
         adj_list = {}

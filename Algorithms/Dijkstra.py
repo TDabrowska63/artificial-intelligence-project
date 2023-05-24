@@ -9,6 +9,7 @@ class Dijkstra:
         self.previous = [None] * self.graph.numberOfNodes
         self.visitedinorder = deque()
 
+    # returns distance, path, visitedList
     def dijkstraAlgorithm(self, start, end):
         self.distances[start] = 0
 
