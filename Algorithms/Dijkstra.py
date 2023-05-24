@@ -35,7 +35,8 @@ class Dijkstra:
                         newvisited.append(element)
                 visitedlist = list(newvisited)
                 return self.distances[end], path, visitedlist
-
+            if min_distance==sys.maxsize:
+                break
             for j in range(self.graph.numberOfNodes):
                 if (
                         not self.visited[j]
