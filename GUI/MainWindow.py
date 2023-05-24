@@ -145,6 +145,7 @@ class MainWindow:
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
+            print(distance, path, visited_list)
             self.dijkstra_visualisation(distance, path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
@@ -182,10 +183,14 @@ class MainWindow:
         a.cla()
         # Create positions of all nodes and save them
         pos = nx.spring_layout(self.nx_graph, seed=100)
+        myKeys = list(pos.keys())
+        myKeys.sort()
+        sorted_pos = {i: pos[i] for i in myKeys}
+        print(sorted_pos)
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
-        nx.draw(self.nx_graph, pos, ax=a, node_color=self.color_map, with_labels=True)
+        nx.draw(self.nx_graph, sorted_pos, ax=a, node_color=self.color_map, with_labels=True)
         # Create edge labels
-        nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
+        nx.draw_networkx_edge_labels(self.nx_graph, sorted_pos, ax=a, edge_labels=weights)
         a.plot()
         self.canvas.draw()
 
@@ -195,12 +200,10 @@ class MainWindow:
         # coloring visited cities in dijkstra searching one by one
         for city in visited_list:
             self.color_map[city] = 'green'
-            # self.draw_graph()
             self.update_map()
             time.sleep(5)
         # show the shortest path
         for city in path:
             self.color_map[city] = 'red'
         # update gui
-        self.draw_graph()
         self.update_map()
