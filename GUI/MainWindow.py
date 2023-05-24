@@ -1,10 +1,15 @@
 import string
 import tkinter as tk
 import customtkinter as ctk
+import networkx as nx
+from matplotlib import pyplot as plt
+import time
+
 from CustomGraph import CustomGraph
 from Constants import Algorithms, Colours
 from Astar import Astar
 from Dijkstra import Dijkstra
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 class MainWindow:
@@ -34,6 +39,10 @@ class MainWindow:
     density: int = 90
     number_of_cities: int = 20
     graph: CustomGraph = None
+    figure: plt.Figure = None
+    canvas: FigureCanvasTkAgg = None
+    nx_graph: nx.Graph = None
+    color_map: string = []
 
     def __init__(self, root, density: int, number_of_cities: int):
         self.root = root
@@ -64,7 +73,16 @@ class MainWindow:
             self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.graph.drawGraph(self.main_window)
+
+        self.nx_graph = nx.Graph()
+        for city in range(self.number_of_cities):
+            self.color_map.append('grey')
+
+        self.figure = plt.Figure(figsize=(8, 5), dpi=100)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.main_window)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, column=0)
+        self.draw_graph()
 
     def add_sidebar(self):
         self.sidebar_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
@@ -123,6 +141,7 @@ class MainWindow:
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
+            self.dijkstra_visualisation(distance, path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
             a = Astar(self.graph)
@@ -130,11 +149,46 @@ class MainWindow:
             path = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
 
-    def update_map(self, density: int, number_of_cities: int):
-        self.density = density
-        self.number_of_cities = number_of_cities
-        self.create_map()
-        self.add_map()
-        # self.add_sidebar()
-        # self.graph.printMe()
-        self.main_window.deiconify()
+    def update_map(self):
+        # self.create_map()
+        # self.add_map()
+        if self.map_frame is not None:
+            self.map_frame.destroy()
+        self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
+        self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
+        self.figure = plt.Figure(figsize=(8, 5), dpi=100)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.main_window)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, column=0)
+        self.draw_graph()
+        self.main_window.update()
+
+    def draw_graph(self):
+        for i in range(self.number_of_cities):
+            for j in range(self.number_of_cities):
+                if self.graph.adjmatrix[i][j] == 1:
+                    self.nx_graph.add_edge(i, j, weight=self.graph.weighmatrix[i][j])
+
+        a = self.figure.add_subplot(111)
+        a.cla()
+        # Create positions of all nodes and save them
+        pos = nx.spring_layout(self.nx_graph)
+        weights = nx.get_edge_attributes(self.nx_graph, 'weight')
+        nx.draw(self.nx_graph, pos, ax=a, node_color=self.color_map, with_labels=True)
+        # Create edge labels
+        nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
+        a.plot()
+        self.canvas.draw()
+
+    def dijkstra_visualisation(self, distance: int, path, visited_list):
+        for city in visited_list:
+            self.color_map[city] = 'green'
+            # self.draw_graph()
+            self.update_map()
+            time.sleep(2)
+
+        for city in path:
+            self.color_map[city] = 'red'
+
+        self.draw_graph()
+        self.update_map()

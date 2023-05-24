@@ -25,28 +25,6 @@ class CustomGraph:
         print("Adjacency weights:")
         print(self.weighmatrix)
 
-    #drawing graphs
-    def drawGraph(self, window):
-        g = nx.Graph()
-        for i in range(self.numberOfNodes):
-            for j in range(self.numberOfNodes):
-                if self.adjmatrix[i][j] == 1:
-                    g.add_edge(i, j, weight=self.weighmatrix[i][j])
-
-        fig = plt.Figure(figsize=(8, 5), dpi=100)
-        canvas = FigureCanvasTkAgg(fig, window)
-        canvas.draw()
-        canvas.get_tk_widget().grid(row=0, column=0)
-        a = fig.add_subplot(111)
-        a.cla()
-        # Create positions of all nodes and save them
-        pos = nx.spring_layout(g)
-        weights = nx.get_edge_attributes(g, 'weight')
-        nx.draw(g, pos, ax=a, with_labels=True)
-        # Create edge labels
-        nx.draw_networkx_edge_labels(g, pos, ax= a, edge_labels = weights)
-        a.plot()
-        canvas.draw()
 
     def randomize(self):
         for i in range(self.numberOfNodes):
