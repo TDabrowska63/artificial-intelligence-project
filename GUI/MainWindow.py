@@ -184,24 +184,27 @@ class MainWindow:
         # Create positions of all nodes and save them
         pos = nx.spring_layout(self.nx_graph, seed=100)
         myKeys = list(pos.keys())
-        myKeys.sort()
         sorted_pos = {i: pos[i] for i in myKeys}
-        print(sorted_pos)
+        sorted_color_map = self.color_map
+        for vertex in myKeys:
+            for i in range(len(self.color_map)):
+                if vertex == i:
+                    sorted_color_map[vertex] = self.color_map[i]
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
-        nx.draw(self.nx_graph, sorted_pos, ax=a, node_color=self.color_map, with_labels=True)
+        nx.draw(self.nx_graph, pos, ax=a, node_color=sorted_color_map, with_labels=True)
         # Create edge labels
-        nx.draw_networkx_edge_labels(self.nx_graph, sorted_pos, ax=a, edge_labels=weights)
+        nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
         a.plot()
         self.canvas.draw()
 
     def dijkstra_visualisation(self, distance: int, path, visited_list):
         # resetting cities colors
-        self.default_cities_coloring()
+        #self.default_cities_coloring()
         # coloring visited cities in dijkstra searching one by one
         for city in visited_list:
             self.color_map[city] = 'green'
             self.update_map()
-            time.sleep(5)
+            time.sleep(2)
         # show the shortest path
         for city in path:
             self.color_map[city] = 'red'
