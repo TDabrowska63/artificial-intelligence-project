@@ -2,9 +2,10 @@ import string
 import tkinter as tk
 import customtkinter as ctk
 import networkx as nx
-from matplotlib import pyplot as plt
 import time
 
+from matplotlib import pyplot as plt
+from GUI.PathWindow import PathWindow
 from CustomGraph import CustomGraph
 from Constants import Algorithms, Colours
 from Astar import Astar
@@ -15,6 +16,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 class MainWindow:
     root: ctk.CTk = None
     main_window: ctk.CTkToplevel = None
+    path_window: PathWindow = None
     open_main_button: ctk.CTkButton = None
     map_frame: ctk.CTkFrame = None
     sidebar_frame: ctk.CTkFrame = None
@@ -140,6 +142,8 @@ class MainWindow:
 
     def run_searching(self):
         print(f"calculating shortest path... {self.radio_var.get()}")
+        distance = 0
+        path = []
         if self.radio_var.get() == Algorithms.DIJKSTRA_A.value:
             print("Dijkstra was chosen")
             self.algorithm_chosen = Algorithms.DIJKSTRA_A
@@ -157,6 +161,7 @@ class MainWindow:
             path, states_matrix, distance = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
             self.astar_visualisation(path, states_matrix, distance)
+        self.path_window = PathWindow(self.root, distance, path)
 
     def update_map(self):
         # self.create_map()
