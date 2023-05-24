@@ -1,5 +1,0 @@
-0 - nic nie było robione, nieodwiedzone
-1 - aktualny wierzchołek
-2 - sąsiad aktualnego wierzchołka
-3 - jest w liście otwartych
-4 - jest w liście zamkniętych
