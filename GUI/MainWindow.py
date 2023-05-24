@@ -45,6 +45,7 @@ class MainWindow:
     canvas: FigureCanvasTkAgg = None
     nx_graph: nx.Graph = None
     color_map: string = []
+    algorithm_chosen: Algorithms = None
 
     def __init__(self, root, density: int, number_of_cities: int):
         self.root = root
@@ -145,6 +146,7 @@ class MainWindow:
         path = []
         if self.radio_var.get() == Algorithms.DIJKSTRA_A.value:
             print("Dijkstra was chosen")
+            self.algorithm_chosen = Algorithms.DIJKSTRA_A
             d = Dijkstra(self.graph)
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
@@ -153,6 +155,7 @@ class MainWindow:
             self.dijkstra_visualisation(distance, path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
+            self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
             # a.printMe()
             path, states_matrix, distance = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
@@ -200,6 +203,21 @@ class MainWindow:
         nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
         # Create edge labels
         nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
+        if self.algorithm_chosen is None:
+            pass
+        elif self.algorithm_chosen == Algorithms.DIJKSTRA_A:
+            legend_labels = ['Not Visited', 'Visited', 'Shortest Path']
+            legend_colors = ['gray', 'green', 'red']
+            legend_elements = [plt.Line2D([0], [0], marker='o', color=color, label=label, markersize=10) for
+                               color, label in zip(legend_colors, legend_labels)]
+            a.legend(handles=legend_elements)
+        elif self.algorithm_chosen == Algorithms.ASTAR_A:
+            legend_labels = ['Not Visited', 'Open List', 'Closed List', 'Current Node', 'Shortest Path']
+            legend_colors = ['gray', 'cyan', 'blue', 'green', 'red']
+            legend_elements = [plt.Line2D([0], [0], marker='o', color=color, label=label, markersize=10) for
+                               color, label in zip(legend_colors, legend_labels)]
+            a.legend(handles=legend_elements)
+
         a.plot()
         self.canvas.draw()
 
