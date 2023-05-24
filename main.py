@@ -6,8 +6,6 @@ from Constants import *
 
 g = CustomGraph(10, 99)
 g.randomize()
-print(Colours.NOT_VISITED.value)
-print(Algorithms.DIJKSTRA_A.value)
 g.printMe()
 gui = Gui()
 
