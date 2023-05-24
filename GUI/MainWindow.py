@@ -151,16 +151,18 @@ class MainWindow:
             distance, path, visited_list = \
                 d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
-            print(distance, path, visited_list)
-            self.dijkstra_visualisation(distance, path, visited_list)
+            if visited_list is not None:
+                self.dijkstra_visualisation(path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
             # a.printMe()
-            distance, path, states_matrix = a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+            distance, path, states_matrix = \
+                a.aStarAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             print(f"start city: {int(self.chosen_start_city.get())}, end city: {int(self.chosen_end_city.get())}")
-            self.astar_visualisation(path, states_matrix, distance)
+            self.astar_visualisation(path, states_matrix)
+
         self.path_window = PathWindow(self.root, distance, path)
 
     def update_map(self):
@@ -221,7 +223,7 @@ class MainWindow:
         a.plot()
         self.canvas.draw()
 
-    def dijkstra_visualisation(self, distance: int, path, visited_list):
+    def dijkstra_visualisation(self, path, visited_list):
         # resetting cities colors
         self.default_cities_coloring()
         # coloring visited cities in dijkstra searching one by one
@@ -230,12 +232,13 @@ class MainWindow:
             self.update_map()
             time.sleep(1)
         # show the shortest path
-        for city in path:
-            self.color_map[city] = 'red'
+        if path is not None:
+            for city in path:
+                self.color_map[city] = 'red'
         # update gui
         self.update_map()
 
-    def astar_visualisation(self, path, states_matrix, distance):
+    def astar_visualisation(self, path, states_matrix):
         # resetting cities colors
         self.default_cities_coloring()
 
@@ -250,9 +253,6 @@ class MainWindow:
             for city in range(len(current_state)):
                 if current_state[city] == Colours.CURRENT_NODE:
                     self.color_map[city] = 'green'
-                elif current_state[city] == Colours.NOT_VISITED:
-                    pass
-                        # self.color_map[city] = 'gray'
                 elif current_state[city] == Colours.IS_OPEN_LIST:
                     self.color_map[city] = 'cyan'
                 elif current_state[city] == Colours.IS_CLOSED_LIST:
@@ -261,7 +261,8 @@ class MainWindow:
             time.sleep(1)
 
         # show the shortest path
-        for city in path:
-            self.color_map[city] = 'red'
+        if path is not None:
+            for city in path:
+                self.color_map[city] = 'red'
         # update gui
         self.update_map()
