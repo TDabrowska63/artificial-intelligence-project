@@ -1,5 +1,5 @@
 import numpy as np
-from Constants import *
+from Misc.Constants import *
 class Astar:
     def __init__(self, graph):
         self.adjacency_list = self.transform(graph)
