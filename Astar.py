@@ -87,15 +87,11 @@ class Astar:
                 # otherwise, check if it's quicker to first visit n, then m
                 # and if it is, update parent data and g data
                 # and if the node was in the closed_list, move it to open_list
-                else:
+                elif m in openList:
                     if g[m] > g[n] + weight:
                         g[m] = g[n] + weight
                         parents[m] = n
-
-                        if m in closedList:
-                            closedList.remove(m)
-                            openList.add(m)
-                            newState[m][0] = Colours.IS_OPEN_LIST
+                # if m is in closed list we ignore it
 
             statesMatrix = np.hstack((statesMatrix, newState))
             # remove n from the open_list, and add it to closed_list
