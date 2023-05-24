@@ -205,7 +205,7 @@ class MainWindow:
         for city in visited_list:
             self.color_map[city] = 'green'
             self.update_map()
-            time.sleep(5)
+            time.sleep(1)
         # show the shortest path
         for city in path:
             self.color_map[city] = 'red'
