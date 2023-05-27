@@ -1,41 +1,32 @@
 import sys
 import random
-from Misc.CustomGraph import CustomGraph
 import numpy as np
-from Misc import *
 
 class RandomSearch:
     def __init__(self, graph):
         self.graph = graph
 
-    def randomSearch(self, start_node, end_node):
-        num_nodes = self.graph.numberOfNodes
-        visited = [False] * num_nodes
-        visited[start_node] = True
+    def random_search(self,start_node, end_node, max_iterations):
         current_node = start_node
+        path = [current_node]
+        total_weight = 0
 
-        while current_node != end_node:
-            neighbors = []
-            for i in range(num_nodes):
-                if self.graph.weighmatrix[current_node][i] != 0 and not visited[i]:
-                    neighbors.append(i)
+        for i in range(max_iterations):
+            if current_node == end_node:
+                return path, total_weight
 
-            if len(neighbors) == 0:
-                current_node = random.choice([i for i in range(num_nodes) if visited[i]])
-            else:
-                current_node = random.choice(neighbors)
+            neighbors = self.graph[current_node]
+            neighbor_nodes = [i for i in range(len(neighbors)) if neighbors[i] != 0]
+            neighbor_weights = [neighbors[i] for i in neighbor_nodes]
 
-            visited[current_node] = True
+            random_index = random.randint(0, len(neighbor_nodes) - 1)
+            next_node = neighbor_nodes[random_index]
+            next_weight = neighbor_weights[random_index]
+            path.append(next_node)
+            total_weight += next_weight
 
-        path = [end_node]
-        while current_node != start_node:
-            for i in range(num_nodes):
-                if self.graph.weighmatrix[i][current_node] != 0 and visited[i]:
-                    path.append(i)
-                    current_node = i
-                    break
+            current_node = next_node
 
-        path.reverse()
-        return path
+        return None
 
 
