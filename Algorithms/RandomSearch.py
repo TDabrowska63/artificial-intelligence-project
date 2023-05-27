@@ -17,13 +17,14 @@ class RandomSearch:
         path = [start_node]
         for i in range(iterations):
             next_node = random.choice(self.adjList[current_node])
+            next_node = next_node[0]
             path.append(next_node)
 
             current_node = next_node
             if current_node == end_node:
                 distance = 0
                 for j in range(len(path) - 1):
-                    distance = distance + self.graph.weighmatrix[path[i], path[i + 1]]
+                    distance = distance + self.graph.weighmatrix[path[j], path[j + 1]]
                 if distance < bestDistance:
                     bestDistance = distance
                     bestPath = path[:]
