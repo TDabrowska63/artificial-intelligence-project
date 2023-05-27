@@ -5,7 +5,7 @@ import numpy as np
 from Misc import *
 
 class RandomSearch:
-    def init(self, graph):
+    def __init__(self, graph):
         self.graph = graph
         self.adjList = graph.transform(graph)
 
