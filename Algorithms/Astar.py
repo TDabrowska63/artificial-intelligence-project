@@ -2,7 +2,7 @@ import numpy as np
 from Misc.Constants import *
 class Astar:
     def __init__(self, graph):
-        self.adjacency_list = self.transform(graph)
+        self.adjacency_list = graph.transform(graph)
         self.graph = graph
 
     def getNeighbors(self, v):
@@ -102,16 +102,6 @@ class Astar:
 
         print('Path does not exist!')
         return None, None, statesMatrix
-
-    def transform(self, graph):
-        adj_list = {}
-        for i in range(graph.numberOfNodes):
-            neighbours = []
-            for j in range(graph.numberOfNodes):
-                if graph.adjmatrix[i, j] == 1 and i != j:
-                    neighbours.append((j, graph.weighmatrix[i, j]))
-            adj_list[i] = neighbours
-        return adj_list
 
     def printMe(self):
         print("Adjacency list:")

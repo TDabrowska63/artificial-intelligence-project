@@ -62,4 +62,12 @@ class CustomGraph:
                     else:
                         self.weighmatrix[i, j] = 0
 
-
+    def transform(self, graph):
+        adj_list = {}
+        for i in range(graph.numberOfNodes):
+            neighbours = []
+            for j in range(graph.numberOfNodes):
+                if graph.adjmatrix[i, j] == 1 and i != j:
+                    neighbours.append((j, graph.weighmatrix[i, j]))
+            adj_list[i] = neighbours
+        return adj_list
