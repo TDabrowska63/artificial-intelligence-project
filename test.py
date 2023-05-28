@@ -36,8 +36,6 @@ class Test:
         return self.shortestRoute
 
 
-
-
 g = CustomGraph(place="Santa Monica, California")
 t = Test(g)
 fig, ax = ox.plot_graph(g.mapReference, close=False, show=False)
@@ -55,9 +53,9 @@ ox.plot_graph_route(g.mapReference, t.shortestRoute)
 #     shortestRoute.append(node_id[p])
 #
 # ox.plot_graph_route(g.mapReference, shortestRoute)
-#g.randomize()
-#r = RandomSearch(g)
-#distance, path, iteration = r.randomSearch(0, 9, 100000)
+# g.randomize()
+# r = RandomSearch(g)
+# distance, path, iteration = r.randomSearch(0, 9, 100000)
 
 
 

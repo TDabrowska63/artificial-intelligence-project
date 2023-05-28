@@ -209,6 +209,7 @@ class MainWindow:
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
         # draw nx graph
         nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
+        # nx.draw_networkx_nodes(self.nx_graph, pos, ax=a, node_size=500, node_color=pos_colors)
         # Create edge labels
         nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
         if self.algorithm_chosen is None:
