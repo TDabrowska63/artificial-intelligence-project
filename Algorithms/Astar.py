@@ -20,7 +20,7 @@ class Astar:
         return H[n]
 
     #returns: distance, path, statesMatrix
-    def aStarAlgorithm(self, startNode, stopNode):
+    def a_star_algorithm(self, startNode, stopNode):
         # open_list is a list of nodes which have been visited, but who's neighbors
         # haven't all been inspected, starts off with the start node
         # closed_list is a list of nodes which have been visited

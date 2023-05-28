@@ -43,7 +43,7 @@ def waiting():
             if node1 is not None and node2 is not None:
                 break
     a = Astar(g)
-    distance, path, states_matrix = a.aStarAlgorithm(node1, node2)
+    distance, path, states_matrix = a.a_star_algorithm(node1, node2)
     node_id = list(g.mapReference.nodes)
     for p in path:
         with global_lock:

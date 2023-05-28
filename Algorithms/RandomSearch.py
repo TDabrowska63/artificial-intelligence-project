@@ -4,12 +4,13 @@ from Misc.CustomGraph import CustomGraph
 import numpy as np
 from Misc import *
 
+
 class RandomSearch:
     def __init__(self, graph):
         self.graph = graph
         self.adjList = graph.transform(graph)
 
-    def randomSearch(self, start_node, end_node, iterations):
+    def random_search_algorithm(self, start_node, end_node, iterations):
         current_node = start_node
 
         bestDistance = float('inf')

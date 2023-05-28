@@ -30,7 +30,7 @@ class CityMap:
 
         if self.node1 is not None and self.node2 is not None:
             a = Astar(self.graph)
-            distance, path, states_matrix = a.aStarAlgorithm(self.node1, self.node2)
+            distance, path, states_matrix = a.a_star_algorithm(self.node1, self.node2)
             node_id = list(self.graph.mapReference.nodes)
             for p in path:
                 self.shortestRoute.append(node_id[p])
