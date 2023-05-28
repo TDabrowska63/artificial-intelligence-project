@@ -1,11 +1,13 @@
 import customtkinter as ctk
 from GUI.MainWindow import MainWindow
+from GUI.OxCityWindow import OxCityWindow
 
 
 class StartWindow:
     root: ctk.CTk = None
     start_window: ctk.CTkToplevel = None
     main_window: MainWindow = None
+    ox_city_window: OxCityWindow = None
     title_frame: ctk.CTkFrame = None
     city_frame: ctk.CTkFrame = None
     graph_frame: ctk.CTkFrame = None
@@ -125,11 +127,13 @@ class StartWindow:
         self.open_main_button.grid(row=5, column=0, pady=20)
 
     def go_to_city_map(self, country_name, city_name):
-        if country_name is "":
+        self.start_window.destroy()
+        if country_name == "":
             country_name = "Poland"
-        if city_name is "":
+        if city_name == "":
             city_name = "Rumia"
         print(f"show map with country: {country_name} and city: {city_name}")
+        self.ox_city_window = OxCityWindow(self.root, country_name, city_name)
 
     def go_to_main_window(self, density, number_of_cities):
         self.start_window.destroy()
