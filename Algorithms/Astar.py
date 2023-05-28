@@ -11,7 +11,10 @@ class Astar:
     def h(self, n, stopNode):
         H = {}
         for i in range(self.graph.numberOfNodes):
-            distance = self.graph.distance(i, stopNode)
+            if self.graph.type == GraphType.RANDOMIZED:
+                distance = self.graph.distance(i, stopNode)
+            elif self.graph.type == GraphType.MAP_BASED:
+                distance = self.graph.lonLatDistance(i, stopNode)
             H[i] = distance
 
         return H[n]

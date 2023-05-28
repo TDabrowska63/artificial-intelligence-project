@@ -1,5 +1,8 @@
 from enum import Enum
 
+class GraphType(Enum):
+    RANDOMIZED = 0
+    MAP_BASED = 1
 
 class Algorithms(Enum):
     DIJKSTRA_A = 0
