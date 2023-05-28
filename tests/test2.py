@@ -27,9 +27,9 @@ def mouse_event(event):
             break
 
     # if self.node1 is not None and self.node2 is not None:
-    #     a = Astar(self.g)
+    #     a = Astar(self.graph)
     #     distance, path, states_matrix = a.aStarAlgorithm(self.node1, self.node2)
-    #     node_id = list(g.mapReference.nodes)
+    #     node_id = list(graph.mapReference.nodes)
     #     for p in path:
     #         shortestRoute.append(node_id[p])
 
@@ -54,6 +54,7 @@ node2 = None
 shortestRoute = []
 
 g = CustomGraph(place="Poland, Rumia")
+colors = ["#ffffff"]
 fig, ax = ox.plot_graph(g.mapReference, close=False, show=False)
 cid = fig.canvas.mpl_connect('button_press_event', mouse_event)
 t = threading.Thread(target=waiting, name="waitingThread", daemon=True)
