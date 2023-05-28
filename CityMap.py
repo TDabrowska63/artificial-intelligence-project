@@ -7,6 +7,7 @@ import osmnx as ox
 import threading
 import time
 
+
 class CityMap:
     def __init__(self, graph):
         self.node1 = None
@@ -41,10 +42,10 @@ class CityMap:
 
 #exemplary usage:
 
-g = CustomGraph(place="Poland, Rumia")
-t = CityMap(g)
-fig, ax = ox.plot_graph(g.mapReference, close=False, show=False)
-cid = fig.canvas.mpl_connect('button_press_event', t.mouse_event)
-plt.show()
-fig.canvas.mpl_disconnect(cid)
-ox.plot_graph_route(g.mapReference, t.shortestRoute)
+# g = CustomGraph(place="Poland, Rumia")
+# t = CityMap(g)
+# fig, ax = ox.plot_graph(g.mapReference, close=False, show=False)
+# cid = fig.canvas.mpl_connect('button_press_event', t.mouse_event)
+# plt.show()
+# fig.canvas.mpl_disconnect(cid)
+# ox.plot_graph_route(g.mapReference, t.shortestRoute)

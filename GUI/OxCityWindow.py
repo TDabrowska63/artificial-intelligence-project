@@ -1,13 +1,14 @@
 import string
 import tkinter as tk
 import customtkinter as ctk
+import osmnx as ox
 import networkx as nx
 import time
 import sys
 
 from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
-# from test import Test
+from CityMap import CityMap
 from Misc.CustomGraph import CustomGraph
 from Misc.Constants import Algorithms, Colours
 from Algorithms.Astar import Astar
@@ -22,8 +23,14 @@ class OxCityWindow:
     path_window: PathWindow = None
     map_frame: ctk.CTkFrame = None
 
-    # city: Test = None
+    sidebar_frame: ctk.CTkFrame = None
+    logo_label: ctk.CTkLabel = None
+
+    city: CityMap = None
     graph: CustomGraph = None
+    figure: plt.Figure = None
+    ax: plt.Axes = None
+    canvas: FigureCanvasTkAgg = None
     country_name: string = None
     city_name: string = None
     gui_width: int = 1100
@@ -38,8 +45,9 @@ class OxCityWindow:
         self.add_map()
 
     def create_map(self):
-        print("")
         # Create graph and CityMap objects
+        self.graph = CustomGraph(place=f"{self.country_name}, {self.city_name}")
+        self.city = CityMap(self.graph)
 
     def set_up_main_window(self):
         self.ox_city_window = ctk.CTkToplevel()
@@ -55,3 +63,25 @@ class OxCityWindow:
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
 
         # add figure, canvas and call plotting methods
+        self.figure, self.ax = ox.plot_graph(self.graph.mapReference, close=False, show=False, block=False)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.ox_city_window)
+        cid = self.canvas.mpl_connect('button_press_event', self.city.mouse_event)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().grid(row=0, column=0)
+
+        plt.show()
+        self.canvas.draw()
+        self.canvas.mpl_disconnect(cid)
+        ox.plot_graph_route(self.graph.mapReference, self.city.shortestRoute)
+        self.canvas.draw()
+
+    def add_sidebar(self):
+        # creating sidebar
+        self.sidebar_frame = ctk.CTkFrame(self.ox_city_window, height=self.gui_height - 40, corner_radius=10)
+        self.sidebar_frame.grid(row=0, column=1, padx=(20, 20), pady=(20, 0), sticky="nsew")
+        # logo/title label
+        self.logo_label = ctk.CTkLabel(self.sidebar_frame, text="Shortest Path",
+                                       font=ctk.CTkFont(size=20, weight="bold"))
+        self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 5))
+
+
