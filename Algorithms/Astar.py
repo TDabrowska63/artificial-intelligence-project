@@ -1,5 +1,7 @@
 import numpy as np
 from Misc.Constants import *
+
+
 class Astar:
     def __init__(self, graph):
         self.adjacency_list = graph.transform(graph)
@@ -10,6 +12,7 @@ class Astar:
 
     def h(self, n, stopNode):
         H = {}
+        distance = 0
         for i in range(self.graph.numberOfNodes):
             if self.graph.type == GraphType.RANDOMIZED:
                 distance = self.graph.distance(i, stopNode)
@@ -33,7 +36,6 @@ class Astar:
         # g contains current distances from start_node to all other nodes
         # the default value (if it's not found in the map) is +infinity
         g = {}
-
         g[startNode] = 0
 
         # parents contains an adjacency map of all nodes

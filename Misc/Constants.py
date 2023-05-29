@@ -7,8 +7,8 @@ class GraphType(Enum):
 
 
 class Algorithms(Enum):
-    DIJKSTRA_A = 0
-    ASTAR_A = 1
+    ASTAR_A = 0
+    DIJKSTRA_A = 1
     RANDOM_A = 2
 
 

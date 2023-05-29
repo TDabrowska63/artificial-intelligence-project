@@ -21,8 +21,8 @@ class PathWindow:
     def set_up_start_window(self):
         self.path_window = ctk.CTkToplevel()
         self.path_window.title("Found Shortest Path")
-        if self.path_length >= 6:
-            self.gui_width += (self.path_length - 6)*10
+        if self.path_length >= 5:
+            self.gui_width += (self.path_length - 5)*40
         self.path_window.geometry(f"{self.gui_width}x{self.gui_height}")
 
     def add_content(self, distance: int):
@@ -45,3 +45,4 @@ class PathWindow:
     @property
     def path_length(self):
         return len(self.path)
+

@@ -139,12 +139,12 @@ class MainWindow:
         self.radio_var = tk.IntVar(value=0)
         self.label_choose_algorithm = ctk.CTkLabel(master=self.choose_algorithm_frame, text="Searching Algorithm:")
         self.label_choose_algorithm.grid(row=0, column=2, columnspan=1, padx=10, pady=5, sticky="")
-        self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
-                                                  variable=self.radio_var, value=0)
-        self.dijkstra_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
         self.astar_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="A*", variable=self.radio_var,
-                                               value=1)
-        self.astar_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
+                                               value=0)
+        self.astar_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
+        self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
+                                                  variable=self.radio_var, value=1)
+        self.dijkstra_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
         self.random_search_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Random Search",
                                                        variable=self.radio_var, value=2)
         self.random_search_button.grid(row=3, column=2, pady=10, padx=10, sticky="nw")
@@ -166,7 +166,7 @@ class MainWindow:
             self.algorithm_chosen = Algorithms.DIJKSTRA_A
             d = Dijkstra(self.graph)
             distance, path, visited_list = \
-                d.dijkstraAlgorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+                d.dijkstra_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             self.dijkstra_visualisation(path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")

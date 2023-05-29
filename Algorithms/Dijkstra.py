@@ -8,10 +8,10 @@ class Dijkstra:
         self.visited = [False] * graph.numberOfNodes
         self.distances = [sys.maxsize] * graph.numberOfNodes
         self.previous = [None] * self.graph.numberOfNodes
-        self.visitedinorder = deque()
+        self.visited_in_order = deque()
 
     # returns distance, path, visitedList
-    def dijkstraAlgorithm(self, start, end):
+    def dijkstra_algorithm(self, start, end):
         self.distances[start] = 0
 
         while not self.visited[end]:
@@ -19,7 +19,7 @@ class Dijkstra:
             min_index = -1
             for i in range(self.graph.numberOfNodes):
                 if not self.visited[i] and self.distances[i] < min_distance:
-                    self.visitedinorder.append(i)
+                    self.visited_in_order.append(i)
                     min_distance = self.distances[i]
                     min_index = i
 
@@ -28,34 +28,34 @@ class Dijkstra:
             if min_index == end:
                 path = self._build_path(end)
                 unique = set()
-                newvisited = deque()
-                while self.visitedinorder:
-                    element = self.visitedinorder.popleft()
+                new_visited = deque()
+                while self.visited_in_order:
+                    element = self.visited_in_order.popleft()
                     if element not in unique:
                         unique.add(element)
-                        newvisited.append(element)
-                visitedlist = list(newvisited)
-                return self.distances[end], path, visitedlist
-            if min_distance==sys.maxsize:
+                        new_visited.append(element)
+                visited_list = list(new_visited)
+                return self.distances[end], path, visited_list
+            if min_distance == sys.maxsize:
                 break
             for j in range(self.graph.numberOfNodes):
                 if (
                         not self.visited[j]
-                        and self.graph.weighmatrix[min_index][j] != 0
+                        and self.graph.weigh_matrix[min_index][j] != 0
                         and self.distances[min_index] != sys.maxsize
-                        and self.distances[min_index] + self.graph.weighmatrix[min_index][j] < self.distances[j]
+                        and self.distances[min_index] + self.graph.weigh_matrix[min_index][j] < self.distances[j]
                 ):
-                    self.distances[j] = self.distances[min_index] + self.graph.weighmatrix[min_index][j]
+                    self.distances[j] = self.distances[min_index] + self.graph.weigh_matrix[min_index][j]
                     self.previous[j] = min_index
         unique = set()
-        newvisited = deque()
-        while self.visitedinorder:
-            element = self.visitedinorder.popleft()
+        new_visited = deque()
+        while self.visited_in_order:
+            element = self.visited_in_order.popleft()
             if element not in unique:
                 unique.add(element)
-                newvisited.append(element)
-        visitedlist = list(newvisited)
-        return None, None, visitedlist
+                new_visited.append(element)
+        visited_list = list(new_visited)
+        return None, None, visited_list
 
     def _build_path(self, end):
         path = []
@@ -66,5 +66,3 @@ class Dijkstra:
             current = self.previous[current]
 
         return path
-
-

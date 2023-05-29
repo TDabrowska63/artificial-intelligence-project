@@ -2,17 +2,12 @@ import string
 import tkinter as tk
 import customtkinter as ctk
 import osmnx as ox
-import networkx as nx
-import time
 import sys
 
 from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
-from CityMap import CityMap
+from Misc.CityMap import CityMap
 from Misc.CustomGraph import CustomGraph
-from Misc.Constants import Algorithms, Colours
-from Algorithms.Astar import Astar
-from Algorithms.Dijkstra import Dijkstra
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
@@ -36,6 +31,8 @@ class OxCityWindow:
     to_clickable_button: ctk.CTkButton = None
     how_to_label: ctk.CTkLabel = None
     run_button: ctk.CTkButton = None
+    calculating: ctk.CTkLabel = None
+    again_button: ctk.CTkButton = None
     exit_button: ctk.CTkButton = None
 
     city: CityMap = None
@@ -47,16 +44,16 @@ class OxCityWindow:
     country_name: string = None
     city_name: string = None
     gui_width: int = 1100
-    gui_height: int = 580
+    gui_height: int = 750
 
     def __init__(self, root, country_name: string, city_name: string):
         self.root = root
         self.country_name = country_name
         self.city_name = city_name
-        self.create_map()
         self.set_up_main_window()
-        self.add_map()
         self.add_sidebar()
+        self.create_map()
+        self.add_map()
 
     def create_map(self):
         # Create graph and CityMap objects
@@ -87,8 +84,16 @@ class OxCityWindow:
     def make_map_clickable(self):
         self.city.algorithm = self.radio_var.get()
         self.canvas.mpl_disconnect(self.cid)
-        self.cid = self.canvas.mpl_connect('button_press_event', self.city.mouse_event)
+        self.update_calculating_label('#f00', " CALCULATING ")
+        self.cid = self.canvas.mpl_connect('button_press_event', lambda event: self.city.mouse_event(event, self))
         self.canvas.draw()
+
+    def update_calculating_label(self, color, text):
+        self.calculating = ctk.CTkLabel(self.sidebar_frame, bg_color=color, text=text,
+                                        font=ctk.CTkFont(size=15))
+        self.calculating.grid(row=6, column=0, padx=(20, 20), pady=10, sticky="nsew")
+        if color == '#090':
+            self.run_button.configure(state="normal")
 
     def update_window(self):
         if self.map_frame is not None:
@@ -122,7 +127,7 @@ class OxCityWindow:
         self.to_clickable_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
         self.how_to_label = ctk.CTkLabel(master=self.sidebar_frame,
                                          text="Choose intersections on\nthe map by clicking on it")
-        self.how_to_label.grid(row=5, column=0, padx=20, pady=10, sticky="nw")
+        self.how_to_label.grid(row=5, column=0, padx=20, pady=(10, 20), sticky="nw")
         self.show_buttons()
 
     def show_algorithms_to_choose(self):
@@ -131,19 +136,33 @@ class OxCityWindow:
         self.radio_var = tk.IntVar(value=0)
         self.label_choose_algorithm = ctk.CTkLabel(master=self.choose_algorithm_frame, text="Searching Algorithm:")
         self.label_choose_algorithm.grid(row=0, column=2, columnspan=1, padx=10, pady=10, sticky="")
-        self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
-                                                  variable=self.radio_var, value=0)
-        self.dijkstra_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
         self.astar_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="A*", variable=self.radio_var,
-                                               value=1)
-        self.astar_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
+                                               value=0)
+        self.astar_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
+        self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
+                                                  variable=self.radio_var, value=1)
+        self.dijkstra_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
+
 
     def show_buttons(self):
-        self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_searching)
-        self.run_button.grid(row=6, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
+        self.run_button = ctk.CTkButton(self.sidebar_frame, text="Show Shortest Path", command=self.run_searching)
+        self.run_button.grid(row=7, column=0, padx=(20, 20), pady=10, sticky="nsew")
+        self.run_button.configure(state="disabled")
+
+        self.again_button = ctk.CTkButton(self.sidebar_frame, text="Try Again", command=self.try_again)
+        self.again_button.grid(row=8, column=0, padx=(20, 20), pady=10, sticky="nsew")
 
         self.exit_button = ctk.CTkButton(self.sidebar_frame, text="Exit", command=self.exit_from_program)
-        self.exit_button.grid(row=7, column=0, padx=(20, 20), pady=(5, 20), sticky="nsew")
+        self.exit_button.grid(row=9, column=0, padx=(20, 20), pady=10, sticky="nsew")
+
+    def try_again(self):
+        self.ox_city_window.destroy()
+        if self.path_window is not None:
+            self.path_window.path_window.destroy()
+        self.create_map()
+        self.set_up_main_window()
+        self.add_map()
+        self.add_sidebar()
 
     def run_searching(self):
         print("searching")
