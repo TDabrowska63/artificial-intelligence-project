@@ -56,6 +56,12 @@ class CustomGraph:
                 coord = (random.randint(0, self.Xbound), random.randint(0, self.Ybound))
             self.nodeCoords.append(coord)
 
+        # for i in range(self.numberOfNodes):
+        #     coord = (round(random.uniform(0.0, self.Xbound), 2), round(random.uniform(0.0, self.Ybound), 2))
+        #     while coord in self.nodeCoords:
+        #         coord = (round(random.uniform(0.0, self.Xbound), 2), round(random.uniform(0.0, self.Ybound), 2))
+        #     self.nodeCoords.append(coord)
+
         for i in range(self.numberOfNodes): # row
             for j in range(i + 1, self.numberOfNodes):  # column
                 adj = random.randint(0, 100)

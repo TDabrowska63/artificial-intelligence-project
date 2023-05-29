@@ -4,6 +4,7 @@ import customtkinter as ctk
 import networkx as nx
 import time
 import sys
+import numpy as np
 
 from matplotlib import pyplot as plt
 from GUI.PathWindow import PathWindow
@@ -40,8 +41,9 @@ class MainWindow:
     run_button: ctk.CTkButton = None
     exit_button: ctk.CTkButton = None
     cities: string = []
-    gui_width: int = 1100
-    gui_height: int = 580
+    gui_width: int = 1300
+    gui_height: int = 880
+    fig_size = (11, 8)
     density: int = 90
     number_of_cities: int = 20
     graph: CustomGraph = None
@@ -63,7 +65,7 @@ class MainWindow:
     def create_map(self):
         self.graph = CustomGraph(self.number_of_cities, self.density)
         self.graph.randomize()
-        self.graph.printMe()
+        # self.graph.printMe()
 
     def set_up_main_window(self):
         self.main_window = ctk.CTkToplevel()
@@ -81,8 +83,8 @@ class MainWindow:
         self.nx_graph = nx.Graph()
         self.default_cities_coloring()
         # creating figure and canvas to draw on
-        self.figure = plt.Figure(figsize=(8, 5), dpi=100)
-        self.canvas = FigureCanvasTkAgg(self.figure, self.main_window)
+        self.figure = plt.Figure(figsize=self.fig_size, dpi=100)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.map_frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row=0, column=0)
         # draw graph
@@ -167,6 +169,8 @@ class MainWindow:
             d = Dijkstra(self.graph)
             distance, path, visited_list = \
                 d.dijkstra_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
+            print(visited_list)
+            print(path)
             self.dijkstra_visualisation(path, visited_list)
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
@@ -190,8 +194,8 @@ class MainWindow:
             self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.main_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        self.figure = plt.Figure(figsize=(8, 5), dpi=100)
-        self.canvas = FigureCanvasTkAgg(self.figure, self.main_window)
+        self.figure = plt.Figure(figsize=self.fig_size, dpi=100)
+        self.canvas = FigureCanvasTkAgg(self.figure, self.map_frame)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row=0, column=0)
         self.draw_graph()
@@ -211,7 +215,12 @@ class MainWindow:
         a = self.figure.add_subplot(111)
         a.cla()
         # Create positions of all nodes and save them
+        # pos = nx.circular_layout(self.nx_graph)
         pos = nx.spring_layout(self.nx_graph, seed=100)
+        # print(self.graph.nodeCoords)
+        pos = self.create_node_positions(pos)
+        # print(pos)
+
         myKeys = list(pos.keys())
         pos_colors = []
         for key in myKeys:
@@ -244,6 +253,16 @@ class MainWindow:
             a.legend(handles=legend_elements)
         a.plot()
         self.canvas.draw()
+
+    def create_node_positions(self, pos):
+        myKeys = list(pos.keys())
+        # pos_with_cords = []
+        for i in myKeys:
+            pos[i] = np.array([self.graph.nodeCoords[i][0], self.graph.nodeCoords[i][1]])
+        return pos
+        # for i in range(self.number_of_cities):
+        #     pos[i] = np.array([self.graph.nodeCoords[i][0], self.graph.nodeCoords[i][0]])
+        # return pos
 
     def dijkstra_visualisation(self, path, visited_list):
         # resetting cities colors

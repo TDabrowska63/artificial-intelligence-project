@@ -143,7 +143,6 @@ class OxCityWindow:
                                                   variable=self.radio_var, value=1)
         self.dijkstra_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
 
-
     def show_buttons(self):
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Show Shortest Path", command=self.run_searching)
         self.run_button.grid(row=7, column=0, padx=(20, 20), pady=10, sticky="nsew")

@@ -41,11 +41,11 @@ class Dijkstra:
             for j in range(self.graph.numberOfNodes):
                 if (
                         not self.visited[j]
-                        and self.graph.weigh_matrix[min_index][j] != 0
+                        and self.graph.weighmatrix[min_index][j] != 0
                         and self.distances[min_index] != sys.maxsize
-                        and self.distances[min_index] + self.graph.weigh_matrix[min_index][j] < self.distances[j]
+                        and self.distances[min_index] + self.graph.weighmatrix[min_index][j] < self.distances[j]
                 ):
-                    self.distances[j] = self.distances[min_index] + self.graph.weigh_matrix[min_index][j]
+                    self.distances[j] = self.distances[min_index] + self.graph.weighmatrix[min_index][j]
                     self.previous[j] = min_index
         unique = set()
         new_visited = deque()

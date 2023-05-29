@@ -30,7 +30,7 @@ class StartWindow:
 
     gui_width: int = 1100
     gui_height: int = 580
-    density: int = 40
+    density: int = 30
     number_of_cities: int = 10
 
     def __init__(self, root):
@@ -114,7 +114,7 @@ class StartWindow:
         self.density_label = ctk.CTkLabel(self.graph_frame, text="Type density of roads as percentage from 0 to 100:",
                                           font=ctk.CTkFont(size=15))
         self.density_label.grid(row=3, column=0, padx=80, pady=(10, 5))
-        self.density_entry = ctk.CTkEntry(self.graph_frame, placeholder_text="40")
+        self.density_entry = ctk.CTkEntry(self.graph_frame, placeholder_text="30")
         self.density_entry.grid(row=4, column=0, padx=80, pady=(5, 5))
         self.density_entry.focus()
 
