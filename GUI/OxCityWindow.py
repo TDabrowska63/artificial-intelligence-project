@@ -17,7 +17,6 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg)
 
 
 class OxCityWindow:
-
     root: ctk.CTk = None
     ox_city_window: ctk.CTkToplevel = None
     path_window: PathWindow = None
@@ -34,6 +33,7 @@ class OxCityWindow:
     astar_button: ctk.CTkRadioButton = None
     random_search_button: ctk.CTkRadioButton = None
     second_step_label: ctk.CTkLabel = None
+    to_clickable_button: ctk.CTkButton = None
     how_to_label: ctk.CTkLabel = None
     run_button: ctk.CTkButton = None
     exit_button: ctk.CTkButton = None
@@ -75,17 +75,20 @@ class OxCityWindow:
             self.map_frame.destroy()
         self.map_frame = ctk.CTkFrame(self.ox_city_window, height=self.gui_height - 40, corner_radius=10)
         self.map_frame.grid(row=0, column=0, rowspan=4, padx=(20, 0), pady=(20, 0), sticky="nsew")
-        # add figure, canvas and call plotting methods
         self.figure, self.ax = ox.plot_graph(self.graph.mapReference, figsize=(9, 7), close=False, show=False, dpi=100)
-        # self.ax.set_xmargin(0)
-        # self.ax.set_ymargin(0)
         self.canvas = FigureCanvasTkAgg(self.figure, self.map_frame)
-        self.cid = self.canvas.mpl_connect('button_press_event', self.city.mouse_event)
+        self.cid = self.canvas.mpl_connect('button_press_event', self.city.do_nothing_event)
         self.canvas.draw()
         self.canvas.get_tk_widget().grid(row=0, column=0)
         self.ax.plot()
         self.canvas.draw()
         self.ox_city_window.update()
+
+    def make_map_clickable(self):
+        self.city.algorithm = self.radio_var.get()
+        self.canvas.mpl_disconnect(self.cid)
+        self.cid = self.canvas.mpl_connect('button_press_event', self.city.mouse_event)
+        self.canvas.draw()
 
     def update_window(self):
         if self.map_frame is not None:
@@ -97,7 +100,6 @@ class OxCityWindow:
         self.canvas.get_tk_widget().grid(row=0, column=0)
         self.ax.plot()
         self.canvas.draw()
-        # self.canvas.mpl_disconnect(self.cid)
         self.ox_city_window.update()
 
     def add_sidebar(self):
@@ -113,11 +115,14 @@ class OxCityWindow:
         self.first_step_label.grid(row=1, column=0, padx=20, pady=(5, 0), sticky="nw")
         self.show_algorithms_to_choose()
         self.second_step_label = ctk.CTkLabel(self.sidebar_frame, bg_color='#147', text=" SECOND STEP ",
-                                             font=ctk.CTkFont(size=15))
+                                              font=ctk.CTkFont(size=15))
         self.second_step_label.grid(row=3, column=0, padx=20, pady=(5, 0), sticky="nw")
+        self.to_clickable_button = ctk.CTkButton(self.sidebar_frame, text="Make Map Clickable",
+                                                 command=self.make_map_clickable)
+        self.to_clickable_button.grid(row=4, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
         self.how_to_label = ctk.CTkLabel(master=self.sidebar_frame,
                                          text="Choose intersections on\nthe map by clicking on it")
-        self.how_to_label.grid(row=4, column=0, padx=20, pady=10, sticky="nw")
+        self.how_to_label.grid(row=5, column=0, padx=20, pady=10, sticky="nw")
         self.show_buttons()
 
     def show_algorithms_to_choose(self):
@@ -132,9 +137,6 @@ class OxCityWindow:
         self.astar_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="A*", variable=self.radio_var,
                                                value=1)
         self.astar_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
-        self.random_search_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Random Search",
-                                                       variable=self.radio_var, value=2)
-        self.random_search_button.grid(row=3, column=2, pady=10, padx=10, sticky="nw")
 
     def show_buttons(self):
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_searching)
@@ -149,7 +151,7 @@ class OxCityWindow:
         self.canvas.mpl_disconnect(self.cid)
         self.figure, self.ax = ox.plot_graph_route(self.graph.mapReference, self.city.shortestRoute, ax=self.ax)
         self.update_window()
-
+        self.path_window = PathWindow(self.root, self.city.distance, self.city.path)
 
     @staticmethod
     def exit_from_program():

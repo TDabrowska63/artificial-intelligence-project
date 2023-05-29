@@ -1,5 +1,4 @@
 import customtkinter as ctk
-from GUI.MainWindow import MainWindow
 from GUI.StartWindow import StartWindow
 
 # set modes
@@ -11,7 +10,6 @@ class Gui:
 
     window: ctk.CTk = None
     start_window: StartWindow = None
-    main_window: MainWindow = None
 
     def __init__(self):
         self.window = ctk.CTk()
@@ -19,5 +17,5 @@ class Gui:
 
     def show_app(self):
         self.window.withdraw()
-        self.start_window = StartWindow(self.window, self.main_window)
+        self.start_window = StartWindow(self.window)
         self.window.mainloop()

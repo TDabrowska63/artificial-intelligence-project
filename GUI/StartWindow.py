@@ -33,9 +33,8 @@ class StartWindow:
     density: int = 40
     number_of_cities: int = 10
 
-    def __init__(self, root, main_window):
+    def __init__(self, root):
         self.root = root
-        # self.main_window = main_window
         self.set_up_start_window()
         self.set_up_frames()
         self.add_graph_frame()
@@ -86,7 +85,7 @@ class StartWindow:
         self.city_name_label = ctk.CTkLabel(self.city_frame, text="Type name of city:",
                                             font=ctk.CTkFont(size=15))
         self.city_name_label.grid(row=3, column=0, padx=80, pady=(10, 5))
-        self.city_name_entry = ctk.CTkEntry(self.city_frame, placeholder_text="Rumia")
+        self.city_name_entry = ctk.CTkEntry(self.city_frame, placeholder_text="Sopot")
         self.city_name_entry.grid(row=4, column=0, padx=80, pady=(5, 5))
         self.city_name_entry.focus()
 
@@ -131,7 +130,7 @@ class StartWindow:
         if country_name == "":
             country_name = "Poland"
         if city_name == "":
-            city_name = "Rumia"
+            city_name = "Sopot"
         print(f"show map with country: {country_name} and city: {city_name}")
         self.ox_city_window = OxCityWindow(self.root, country_name, city_name)
 

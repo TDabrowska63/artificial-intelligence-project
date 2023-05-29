@@ -1,11 +1,8 @@
-import matplotlib.pyplot as plt
-
 from Algorithms.Astar import Astar
-from Misc.CustomGraph import *
+from Algorithms.Dijkstra import Dijkstra
+from Misc.Constants import Algorithms
 
 import osmnx as ox
-import threading
-import time
 
 
 class CityMap:
@@ -14,6 +11,9 @@ class CityMap:
         self.node2 = None
         self.graph = graph
         self.shortestRoute = []
+        self.algorithm = Algorithms.ASTAR_A.value
+        self.distance: int = 0
+        self.path = []
 
     def mouse_event(self, event):
         nid = ox.nearest_nodes(self.graph.mapReference, event.xdata, event.ydata)
@@ -29,18 +29,23 @@ class CityMap:
                 break
 
         if self.node1 is not None and self.node2 is not None:
-            a = Astar(self.graph)
-            distance, path, states_matrix = a.a_star_algorithm(self.node1, self.node2)
+            if self.algorithm == Algorithms.ASTAR_A.value:
+                a = Astar(self.graph)
+                self.distance, self.path, states_matrix = a.a_star_algorithm(self.node1, self.node2)
+            elif self.algorithm == Algorithms.DIJKSTRA_A.value:
+                d = Dijkstra(self.graph)
+                self.distance, self.path, visited_list = d.dijkstraAlgorithm(self.node1, self.node2)
             node_id = list(self.graph.mapReference.nodes)
-            for p in path:
+            for p in self.path:
                 self.shortestRoute.append(node_id[p])
             self.node1 = None
             self.node2 = None
 
-    def getShortestRoute(self):
-        return self.shortestRoute
+    @staticmethod
+    def do_nothing_event(event):
+        print("clicking not active")
 
-#exemplary usage:
+# exemplary usage:
 
 # g = CustomGraph(place="Poland, Rumia")
 # t = CityMap(g)
