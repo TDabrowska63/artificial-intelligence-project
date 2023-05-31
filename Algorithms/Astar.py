@@ -10,7 +10,7 @@ class Astar:
     def getNeighbors(self, v):
         return self.adjacency_list[v]
 
-    def h(self, n, stopNode):
+    def h(self, stopNode):
         H = {}
         distance = 0
         for i in range(self.graph.numberOfNodes):
@@ -20,7 +20,7 @@ class Astar:
                 distance = self.graph.lonLatDistance(i, stopNode)
             H[i] = distance
 
-        return H[n]
+        return H
 
     #returns: distance, path, statesMatrix
     def a_star_algorithm(self, startNode, stopNode):
@@ -32,6 +32,7 @@ class Astar:
         closedList = set([])
         statesMatrix = np.full((self.graph.numberOfNodes, 2), Colours.NOT_VISITED, dtype=Colours)
         statesMatrix[startNode, 1] = Colours.IS_OPEN_LIST
+        heuristic = self.h(stopNode)
 
         # g contains current distances from start_node to all other nodes
         # the default value (if it's not found in the map) is +infinity
@@ -48,12 +49,12 @@ class Astar:
 
             # find a node with the lowest value of f() - evaluation function
             for v in openList:
-                if n == None or g[v] + self.h(v, stopNode) < g[n] + self.h(n, stopNode):
+                if n == None or g[v] + heuristic[v] < g[n] + heuristic[v]:
                     n = v
 
             if n == None:
                 print('Path does not exist!')
-                return None, None, statesMatrix
+                return None, None, statesMatrix, heuristic
 
             newState[n][0] = Colours.CURRENT_NODE
             statesMatrix = np.hstack((statesMatrix, newState))
@@ -76,7 +77,7 @@ class Astar:
                     distance = distance + self.graph.weighmatrix[reconstPath[i], reconstPath[i+1]]
 
                 print('Path found: {}'.format(reconstPath))
-                return distance, reconstPath, statesMatrix
+                return distance, reconstPath, statesMatrix, heuristic
 
             neighbours = self.getNeighbors(n)
             # for all neighbors of the current node do
@@ -106,7 +107,7 @@ class Astar:
             statesMatrix = np.hstack((statesMatrix, newState))
 
         print('Path does not exist!')
-        return None, None, statesMatrix
+        return None, None, statesMatrix, heuristic
 
     def printMe(self):
         print("Adjacency list:")
