@@ -52,7 +52,7 @@ class MainWindow:
     nx_graph: nx.Graph = None
     color_map: string = []
     algorithm_chosen: Algorithms = None
-
+    heuristic = None
     def __init__(self, root, density: int, number_of_cities: int):
         self.root = root
         self.density = density
@@ -176,7 +176,7 @@ class MainWindow:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
-            distance, path, states_matrix = \
+            distance, path, states_matrix, self.heuristic = \
                 a.a_star_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             self.astar_visualisation(path, states_matrix)
         elif self.radio_var.get() == Algorithms.RANDOM_A.value:
@@ -227,7 +227,15 @@ class MainWindow:
             pos_colors.append(self.color_map[key])
         weights = nx.get_edge_attributes(self.nx_graph, 'weight')
         # draw nx graph
-        nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
+        if self.algorithm_chosen == Algorithms.ASTAR_A:
+            # if the chosen algorithm is astar, draw it so that instead of numbered nodes
+            # we have nodes with labels that represent the heuristic value.
+            node_labels = {}
+            for i in range(len(self.heuristic)):
+                node_labels[i] = int(self.heuristic[i])
+            nx.draw(self.nx_graph, pos, ax=a, labels=node_labels, node_color=pos_colors, with_labels=True)
+        else:
+            nx.draw(self.nx_graph, pos, ax=a, node_color=pos_colors, with_labels=True)
         # nx.draw_networkx_nodes(self.nx_graph, pos, ax=a, node_size=500, node_color=pos_colors)
         # Create edge labels
         nx.draw_networkx_edge_labels(self.nx_graph, pos, ax=a, edge_labels=weights)
