@@ -236,7 +236,7 @@ class MainWindow:
             if self.radio_type.get() == 0:
                 self.random_search_visualisation()
         if self.radio_type.get() == 0:
-            self.path_window = PathWindow(self.root, distance)
+            self.path_window = PathWindow(self.root, distance, self.path)
         else:
             # self.prev_button.configure(state="normal")
             self.next_button.configure(state="normal")
