@@ -35,10 +35,18 @@ class MainWindow:
     radio_var: tk.IntVar = None
     label_choose_algorithm: ctk.CTkLabel = None
     dijkstra_button: ctk.CTkRadioButton = None
-    bfs_button: ctk.CTkRadioButton = None
     astar_button: ctk.CTkRadioButton = None
     random_search_button: ctk.CTkRadioButton = None
+
+    choose_type_frame: ctk.CTkFrame = None
+    radio_type: tk.IntVar = None
+    label_choose_type: ctk.CTkLabel = None
+    automatic_button: ctk.CTkRadioButton = None
+    manual_button: ctk.CTkRadioButton = None
+
     run_button: ctk.CTkButton = None
+    prev_button: ctk.CTkButton = None
+    next_button: ctk.CTkButton = None
     exit_button: ctk.CTkButton = None
     cities: string = []
     gui_width: int = 1300
@@ -104,6 +112,7 @@ class MainWindow:
         self.show_sidebar_labels()
         self.show_cities_to_choose()
         self.show_algorithms_to_choose()
+        self.show_view_type_to_choose()
         self.show_buttons()
 
     def show_sidebar_labels(self):
@@ -137,7 +146,7 @@ class MainWindow:
 
     def show_algorithms_to_choose(self):
         self.choose_algorithm_frame = ctk.CTkFrame(self.sidebar_frame)
-        self.choose_algorithm_frame.grid(row=6, column=0, padx=20, pady=20, sticky="nsew")
+        self.choose_algorithm_frame.grid(row=6, column=0, padx=20, pady=(20, 5), sticky="nsew")
         self.radio_var = tk.IntVar(value=0)
         self.label_choose_algorithm = ctk.CTkLabel(master=self.choose_algorithm_frame, text="Searching Algorithm:")
         self.label_choose_algorithm.grid(row=0, column=2, columnspan=1, padx=10, pady=5, sticky="")
@@ -151,12 +160,36 @@ class MainWindow:
                                                        variable=self.radio_var, value=2)
         self.random_search_button.grid(row=3, column=2, pady=10, padx=10, sticky="nw")
 
+    def show_view_type_to_choose(self):
+        self.choose_type_frame = ctk.CTkFrame(self.sidebar_frame)
+        self.choose_type_frame.grid(row=7, column=0, padx=20, pady=(5, 10), sticky="nsew")
+        self.radio_type = tk.IntVar(value=0)
+        self.label_choose_type = ctk.CTkLabel(master=self.choose_type_frame, text="Viewing Type:")
+        self.label_choose_type.grid(row=0, column=2, columnspan=1, padx=10, pady=5, sticky="")
+        self.automatic_button = ctk.CTkRadioButton(master=self.choose_type_frame, text="Automatic",
+                                                   variable=self.radio_type,
+                                                   value=0)
+        self.automatic_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
+        self.manual_button = ctk.CTkRadioButton(master=self.choose_type_frame, text="Manual",
+                                                variable=self.radio_var, value=1)
+        self.manual_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
+
     def show_buttons(self):
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Calculate Shortest Path", command=self.run_searching)
-        self.run_button.grid(row=7, column=0, padx=(20, 20), pady=(20, 10), sticky="nsew")
+        self.run_button.grid(row=8, column=0, padx=(20, 20), pady=(10, 10), sticky="nsew")
+
+        self.prev_button = ctk.CTkButton(self.sidebar_frame, text="Prev", command=lambda: self.change_state(-1))
+        self.prev_button.grid(row=9, column=0, padx=20, pady=(10, 5), sticky="nsew")
+        self.prev_button.configure(state="disabled")
+        self.next_button = ctk.CTkButton(self.sidebar_frame, text="Next", command=lambda: self.change_state(1))
+        self.next_button.grid(row=10, column=0, padx=20, pady=(0, 10), sticky="nsew")
+        self.next_button.configure(state="disabled")
 
         self.exit_button = ctk.CTkButton(self.sidebar_frame, text="Exit", command=self.exit_from_program)
-        self.exit_button.grid(row=8, column=0, padx=(20, 20), pady=(5, 20), sticky="nsew")
+        self.exit_button.grid(row=11, column=0, padx=(20, 20), pady=(10, 20), sticky="nsew")
+
+    def change_state(self, change: int):
+        print()
 
     def run_searching(self):
         print(f"calculating shortest path... {self.radio_var.get()}")
@@ -184,7 +217,7 @@ class MainWindow:
             self.algorithm_chosen = Algorithms.RANDOM_A
             r = RandomSearch(self.graph)
             distance, path, best_iter = r.random_search_algorithm(
-                int(self.chosen_start_city.get()), int(self.chosen_end_city.get()), 100*self.number_of_cities)
+                int(self.chosen_start_city.get()), int(self.chosen_end_city.get()), 100 * self.number_of_cities)
             self.random_search_visualisation(path)
         self.path_window = PathWindow(self.root, distance, path)
 
@@ -215,8 +248,8 @@ class MainWindow:
         a = self.figure.add_subplot(111)
         a.cla()
         # Create positions of all nodes and save them
-        # pos = nx.circular_layout(self.nx_graph)
-        pos = nx.spring_layout(self.nx_graph, seed=100)
+        pos = nx.circular_layout(self.nx_graph)
+        # pos = nx.spring_layout(self.nx_graph, seed=100)
         # print(self.graph.nodeCoords)
         pos = self.create_node_positions(pos)
         # print(pos)
