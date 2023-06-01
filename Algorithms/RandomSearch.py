@@ -31,5 +31,6 @@ class RandomSearch:
                     bestPath = path[:]
                     bestIteration = i
                 path = [start_node]
+                current_node = start_node
 
         return bestDistance, bestPath, bestIteration

@@ -33,7 +33,7 @@ class CityMap:
         if self.node1 is not None and self.node2 is not None:
             if self.algorithm == Algorithms.ASTAR_A.value:
                 a = Astar(self.graph)
-                self.distance, self.path, states_matrix = a.a_star_algorithm(self.node1, self.node2)
+                self.distance, self.path, states_matrix, heuristic = a.a_star_algorithm(self.node1, self.node2)
             elif self.algorithm == Algorithms.DIJKSTRA_A.value:
                 d = Dijkstra(self.graph)
                 self.distance, self.path, visited_list = d.dijkstra_algorithm(self.node1, self.node2)
@@ -41,9 +41,12 @@ class CityMap:
 
             if self.path is None:
                 print(f"Cannot find the path for {self.node1} and {self.node2}")
+                self.shortestRoute.append((node_id[self.node1]))
+                self.path = [self.node1]
+            else:
+                for p in self.path:
+                    self.shortestRoute.append(node_id[p])
 
-            for p in self.path:
-                self.shortestRoute.append(node_id[p])
             self.node1 = None
             self.node2 = None
             window.update_calculating_label('#090', " READY ")
