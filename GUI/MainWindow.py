@@ -172,7 +172,7 @@ class MainWindow:
                                                    value=0)
         self.automatic_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
         self.manual_button = ctk.CTkRadioButton(master=self.choose_type_frame, text="Manual",
-                                                variable=self.radio_var, value=1)
+                                                variable=self.radio_type, value=1)
         self.manual_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
 
     def show_buttons(self):
