@@ -215,24 +215,31 @@ class MainWindow:
             d = Dijkstra(self.graph)
             distance, self.path, self.visited_list = \
                 d.dijkstra_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
-            print(self.visited_list)
-            print(self.path)
-            self.dijkstra_visualisation()
+            # print(visited_list)
+            # print(path)
+            if self.radio_type.get() == 0:
+                self.dijkstra_visualisation()
         elif self.radio_var.get() == Algorithms.ASTAR_A.value:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
             distance, self.path, self.states_matrix, self.heuristic = \
                 a.a_star_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
-            self.astar_visualisation()
+            if self.radio_type.get() == 0:
+                self.astar_visualisation()
         elif self.radio_var.get() == Algorithms.RANDOM_A.value:
             print("Random Search was chosen")
             self.algorithm_chosen = Algorithms.RANDOM_A
             r = RandomSearch(self.graph)
             distance, self.path, best_iter = r.random_search_algorithm(
                 int(self.chosen_start_city.get()), int(self.chosen_end_city.get()), 100 * self.number_of_cities)
-            self.random_search_visualisation()
-        self.path_window = PathWindow(self.root, distance)
+            if self.radio_type.get() == 0:
+                self.random_search_visualisation()
+        if self.radio_type.get() == 0:
+            self.path_window = PathWindow(self.root, distance)
+        else:
+            # self.prev_button.configure(state="normal")
+            self.next_button.configure(state="normal")
 
     def update_map(self):
         self.clear_canvas()
