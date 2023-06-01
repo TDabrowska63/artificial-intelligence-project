@@ -35,6 +35,7 @@ class Dijkstra:
                         unique.add(element)
                         new_visited.append(element)
                 visited_list = list(new_visited)
+                print('Path found: {}'.format(path))
                 return self.distances[end], path, visited_list
             if min_distance == sys.maxsize:
                 break
