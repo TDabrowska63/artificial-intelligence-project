@@ -53,6 +53,7 @@ class MainWindow:
     color_map: string = []
     algorithm_chosen: Algorithms = None
     heuristic = None
+    state = None
     def __init__(self, root, density: int, number_of_cities: int):
         self.root = root
         self.density = density
@@ -287,6 +288,28 @@ class MainWindow:
         # update gui
         self.update_map()
 
+    def colour_astar(self, current_state):
+        for city in range(len(current_state)):
+            if current_state[city] == Colours.CURRENT_NODE:
+                self.color_map[city] = 'green'
+            elif current_state[city] == Colours.IS_OPEN_LIST:
+                self.color_map[city] = 'cyan'
+            elif current_state[city] == Colours.IS_CLOSED_LIST:
+                self.color_map[city] = 'blue'
+
+    def astar_visualisation_extended(self, path, states_matrix):
+        self.default_cities_coloring()
+        self.colour_astar(states_matrix[self.state])
+        self.update_map()
+
+        if self.state == len(states_matrix):
+            # show the shortest path
+            if path is not None:
+                for city in path:
+                    self.color_map[city] = 'red'
+            # update gui
+            self.update_map()
+
     def astar_visualisation(self, path, states_matrix):
         # resetting cities colors
         self.default_cities_coloring()
@@ -299,13 +322,7 @@ class MainWindow:
 
         for column in range(len(states_matrix[0])):
             current_state = states_matrix[:, column]
-            for city in range(len(current_state)):
-                if current_state[city] == Colours.CURRENT_NODE:
-                    self.color_map[city] = 'green'
-                elif current_state[city] == Colours.IS_OPEN_LIST:
-                    self.color_map[city] = 'cyan'
-                elif current_state[city] == Colours.IS_CLOSED_LIST:
-                    self.color_map[city] = 'blue'
+            self.colour_astar(current_state)
             self.update_map()
             time.sleep(1)
 
