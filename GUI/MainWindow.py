@@ -313,6 +313,7 @@ class MainWindow:
             self.color_map[city] = 'green'
             if i >= self.state:
                 break
+            i += 1
 
         if self.state == len(visited_list):
             # show the shortest path
