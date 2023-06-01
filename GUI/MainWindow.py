@@ -306,6 +306,22 @@ class MainWindow:
         #     pos[i] = np.array([self.graph.nodeCoords[i][0], self.graph.nodeCoords[i][0]])
         # return pos
 
+    def dijkstra_visualisation_extended(self, path, visited_list):
+        self.default_cities_coloring()
+        i = 0
+        for city in visited_list:
+            self.color_map[city] = 'green'
+            if i >= self.state:
+                break
+
+        if self.state == len(visited_list):
+            # show the shortest path
+            if path is not None:
+                for city in path:
+                    self.color_map[city] = 'red'
+        # update gui
+        self.update_map()
+
     def dijkstra_visualisation(self, path, visited_list):
         # resetting cities colors
         self.default_cities_coloring()
