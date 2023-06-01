@@ -41,9 +41,12 @@ class CityMap:
 
             if self.path is None:
                 print(f"Cannot find the path for {self.node1} and {self.node2}")
+                self.shortestRoute.append((node_id[self.node1]))
+                self.path = [self.node1]
+            else:
+                for p in self.path:
+                    self.shortestRoute.append(node_id[p])
 
-            for p in self.path:
-                self.shortestRoute.append(node_id[p])
             self.node1 = None
             self.node2 = None
             window.update_calculating_label('#090', " READY ")
