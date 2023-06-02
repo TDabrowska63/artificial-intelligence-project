@@ -28,7 +28,7 @@ class RandomSearch:
                     distance = distance + self.graph.weighmatrix[path[j], path[j + 1]]
                 if distance < bestDistance:
                     bestDistance = distance
-                    bestPath = path[:]
+                    bestPath = path
                     bestIteration = i
                 path = [start_node]
                 current_node = start_node

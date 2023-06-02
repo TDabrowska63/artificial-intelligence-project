@@ -378,7 +378,7 @@ class MainWindow:
 
     def astar_visualisation_extended(self):
         self.default_cities_coloring()
-        current_state = self.states_matrix[:, self.state]
+        current_state = self.states_matrix[:, self.state-1]
         self.colour_astar(current_state)
         if self.state == len(self.states_matrix[1, :]):
             self.the_end()
