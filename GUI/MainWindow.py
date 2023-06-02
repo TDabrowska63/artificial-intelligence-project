@@ -387,12 +387,12 @@ class MainWindow:
         self.colour_astar(current_state)
         self.update_map()
 
-        if self.state == len(self.states_matrix[1, :]):
+        if self.state == len(self.states_matrix[1, :]) - 1:
             # show the shortest path
             if self.path is not None:
                 for city in self.path:
                     self.color_map[city] = 'red'
-                    self.path_window = PathWindow(self.root, self.distance, self.path)
+                    #self.path_window = PathWindow(self.root, self.distance, self.path)
             # update gui
             self.update_map()
 
