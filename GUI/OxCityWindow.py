@@ -139,9 +139,9 @@ class OxCityWindow:
         self.astar_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="A*", variable=self.radio_var,
                                                value=0)
         self.astar_button.grid(row=1, column=2, pady=10, padx=10, sticky="nw")
-        self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
-                                                  variable=self.radio_var, value=1)
-        self.dijkstra_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
+        ##self.dijkstra_button = ctk.CTkRadioButton(master=self.choose_algorithm_frame, text="Dijkstra",
+                                                ##  variable=self.radio_var, value=1)
+        ##self.dijkstra_button.grid(row=2, column=2, pady=10, padx=10, sticky="nw")
 
     def show_buttons(self):
         self.run_button = ctk.CTkButton(self.sidebar_frame, text="Show Shortest Path", command=self.run_searching)
