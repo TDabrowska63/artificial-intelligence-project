@@ -347,13 +347,8 @@ class MainWindow:
             if i >= self.state:
                 break
             i += 1
-
         if self.state == len(self.visited_list):
-            # show the shortest path
-            if self.path is not None:
-                for city in self.path:
-                    self.color_map[city] = 'red'
-                    self.path_window = PathWindow(self.root, self.distance, self.path)
+            self.the_end()
         # update gui
         self.update_map()
 
@@ -385,16 +380,21 @@ class MainWindow:
         self.default_cities_coloring()
         current_state = self.states_matrix[:, self.state]
         self.colour_astar(current_state)
+        if self.state == len(self.states_matrix[1, :]):
+            self.the_end()
         self.update_map()
 
-        if self.state == len(self.states_matrix[1, :]):
-            # show the shortest path
-            if self.path is not None:
-                for city in self.path:
-                    self.color_map[city] = 'red'
-                    self.path_window = PathWindow(self.root, self.distance, self.path)
-            # update gui
-            self.update_map()
+    def the_end(self):
+        # show the shortest path
+        if self.path is not None:
+            for city in self.path:
+                self.color_map[city] = 'red'
+            self.path_window = PathWindow(self.root, self.distance, self.path)
+            self.state = 0
+            self.next_button.configure(state="disabled")
+            self.prev_button.configure(state="disabled")
+        # update gui
+        self.update_map()
 
     def astar_visualisation(self):
         # resetting cities colors
