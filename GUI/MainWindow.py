@@ -194,7 +194,7 @@ class MainWindow:
         self.exit_button.grid(row=11, column=0, padx=(20, 20), pady=(10, 20), sticky="nsew")
 
     def change_state(self, change: int):
-        if self.state + change == 0:
+        if self.state + change <= 0:
             self.prev_button.configure(state="disabled")
         elif self.state + change > 0:
             self.prev_button.configure(state="normal")
@@ -205,10 +205,12 @@ class MainWindow:
         elif self.algorithm_chosen == Algorithms.DIJKSTRA_A:
             maxi = len(self.visited_list)
 
-        if self.state + change == maxi:
+        if self.state + change >= maxi:
             self.next_button.configure(state="disabled")
         elif self.state + change < maxi:
             self.next_button.configure(state="normal")
+
+        self.state += change
 
         if self.algorithm_chosen == Algorithms.ASTAR_A:
             self.astar_visualisation_extended()
