@@ -387,7 +387,7 @@ class MainWindow:
         self.colour_astar(current_state)
         self.update_map()
 
-        if self.state == len(self.states_matrix):
+        if self.state == len(self.states_matrix[1, :]):
             # show the shortest path
             if self.path is not None:
                 for city in self.path:
