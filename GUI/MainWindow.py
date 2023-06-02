@@ -65,6 +65,7 @@ class MainWindow:
     states_matrix = None
     visited_list = None
     path = None
+    distance: int = 0
     def __init__(self, root, density: int, number_of_cities: int):
         self.root = root
         self.density = density
@@ -193,16 +194,27 @@ class MainWindow:
         self.exit_button.grid(row=11, column=0, padx=(20, 20), pady=(10, 20), sticky="nsew")
 
     def change_state(self, change: int):
-        # if self.state + change < 0:
-        #     self.prev_button.configure(state="disabled")
-        # elif self.state >= 0:
-        #     self.prev_button.configure(state="enabled")
-        # elif self.state + change > self.states_num:
-        #     self.next_button.configure(state="disabled")
-        # elif self.state <= 0:
-        #     self.prev_button.configure(state="enabled")
-        # print()
-        pass
+        if self.state + change == 0:
+            self.prev_button.configure(state="disabled")
+        elif self.state + change > 0:
+            self.prev_button.configure(state="normal")
+
+        maxi = 0
+        if self.algorithm_chosen == Algorithms.ASTAR_A:
+            maxi = len(self.states_matrix[1, :])
+        elif self.algorithm_chosen == Algorithms.DIJKSTRA_A:
+            maxi = len(self.visited_list)
+
+        if self.state + change == maxi:
+            self.next_button.configure(state="disabled")
+        elif self.state + change < maxi:
+            self.next_button.configure(state="normal")
+
+        if self.algorithm_chosen == Algorithms.ASTAR_A:
+            self.astar_visualisation_extended()
+        elif self.algorithm_chosen == Algorithms.DIJKSTRA_A:
+            self.dijkstra_visualisation_extended()
+
 
     def run_searching(self):
         print(f"calculating shortest path... {self.radio_var.get()}")
@@ -213,7 +225,7 @@ class MainWindow:
             print("Dijkstra was chosen")
             self.algorithm_chosen = Algorithms.DIJKSTRA_A
             d = Dijkstra(self.graph)
-            distance, self.path, self.visited_list = \
+            self.distance, self.path, self.visited_list = \
                 d.dijkstra_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             # print(visited_list)
             # print(path)
@@ -223,7 +235,7 @@ class MainWindow:
             print("A* was chosen")
             self.algorithm_chosen = Algorithms.ASTAR_A
             a = Astar(self.graph)
-            distance, self.path, self.states_matrix, self.heuristic = \
+            self.distance, self.path, self.states_matrix, self.heuristic = \
                 a.a_star_algorithm(int(self.chosen_start_city.get()), int(self.chosen_end_city.get()))
             if self.radio_type.get() == 0:
                 self.astar_visualisation()
@@ -231,12 +243,12 @@ class MainWindow:
             print("Random Search was chosen")
             self.algorithm_chosen = Algorithms.RANDOM_A
             r = RandomSearch(self.graph)
-            distance, self.path, best_iter = r.random_search_algorithm(
+            self.distance, self.path, best_iter = r.random_search_algorithm(
                 int(self.chosen_start_city.get()), int(self.chosen_end_city.get()), 100 * self.number_of_cities)
             if self.radio_type.get() == 0:
                 self.random_search_visualisation()
         if self.radio_type.get() == 0:
-            self.path_window = PathWindow(self.root, distance)
+            self.path_window = PathWindow(self.root, self.distance, self.path)
         else:
             # self.prev_button.configure(state="normal")
             self.next_button.configure(state="normal")
@@ -339,6 +351,7 @@ class MainWindow:
             if self.path is not None:
                 for city in self.path:
                     self.color_map[city] = 'red'
+                    self.path_window = PathWindow(self.root, self.distance, self.path)
         # update gui
         self.update_map()
 
@@ -376,6 +389,7 @@ class MainWindow:
             if self.path is not None:
                 for city in self.path:
                     self.color_map[city] = 'red'
+                    self.path_window = PathWindow(self.root, self.distance, self.path)
             # update gui
             self.update_map()
 
